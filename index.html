@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Visa 3D Manager</title>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Visa Manager Mobile Safe</title>
   <style>
     :root {
       --bg: #0a0620;
       --bg2: #160d34;
-      --panel: rgba(22, 16, 48, 0.82);
-      --panel-2: rgba(29, 21, 63, 0.82);
+      --panel: rgba(22, 16, 48, 0.84);
+      --panel-2: rgba(29, 21, 63, 0.86);
       --text: #f6f0ff;
       --muted: #cabcf0;
       --line: rgba(194, 157, 255, 0.18);
       --primary: #8f4bff;
       --primary-2: #b56dff;
-      --accent: #7c3aed;
       --ok: #32c36c;
       --danger: #ef4444;
       --warn: #f59e0b;
@@ -31,14 +30,13 @@
     body.light {
       --bg: #f6f1ff;
       --bg2: #ebe3ff;
-      --panel: rgba(255, 255, 255, 0.82);
-      --panel-2: rgba(248, 244, 255, 0.84);
+      --panel: rgba(255, 255, 255, 0.86);
+      --panel-2: rgba(248, 244, 255, 0.90);
       --text: #24153d;
       --muted: #715f98;
       --line: rgba(124, 58, 237, 0.15);
       --primary: #8f4bff;
       --primary-2: #6d28d9;
-      --accent: #7c3aed;
       --ok: #159b49;
       --danger: #dc2626;
       --warn: #d97706;
@@ -49,7 +47,10 @@
       --card-shadow: 0 18px 35px rgba(109,40,217,0.15);
     }
 
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
 
     html, body {
       margin: 0;
@@ -62,10 +63,20 @@
       color: var(--text);
     }
 
+    body {
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    input, textarea, .copy-value {
+      user-select: text;
+      -webkit-user-select: text;
+    }
+
     .app {
       max-width: 520px;
       margin: 0 auto;
-      padding: 14px 12px 28px;
+      padding: 12px 10px 28px;
     }
 
     .glass {
@@ -78,11 +89,11 @@
     }
 
     .hero {
-      padding: 16px;
-      margin-bottom: 14px;
       position: sticky;
-      top: 8px;
+      top: 6px;
       z-index: 20;
+      padding: 14px;
+      margin-bottom: 12px;
     }
 
     .topbar {
@@ -96,7 +107,6 @@
       margin: 0;
       font-size: 22px;
       font-weight: 800;
-      letter-spacing: .2px;
     }
 
     .subtitle {
@@ -104,8 +114,17 @@
       line-height: 1.7;
       color: var(--muted);
       font-size: 13px;
-      user-select: none;
-      -webkit-user-select: none;
+    }
+
+    .section {
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      margin: 0 0 12px;
+      font-size: 18px;
+      font-weight: 800;
     }
 
     .icon-btn, .btn, .mini-btn {
@@ -129,24 +148,11 @@
       font-weight: 700;
     }
 
-    .section {
-      padding: 16px;
-      margin-bottom: 14px;
-    }
-
-    .section-title {
-      margin: 0 0 12px;
-      font-size: 18px;
-      font-weight: 800;
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
     .stats {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 10px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .stat {
@@ -155,8 +161,6 @@
       border-radius: 18px;
       border: 1px solid var(--line);
       box-shadow: var(--inner-glow);
-      user-select: none;
-      -webkit-user-select: none;
     }
 
     .stat small {
@@ -172,10 +176,30 @@
       font-weight: 800;
     }
 
-    .grid { display: grid; gap: 12px; }
-    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
-    .actions-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 12px; }
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .actions-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
 
     .field label {
       display: block;
@@ -183,8 +207,6 @@
       font-weight: 700;
       color: var(--muted);
       margin-bottom: 6px;
-      user-select: none;
-      -webkit-user-select: none;
     }
 
     .input, .select, .textarea {
@@ -199,14 +221,20 @@
       box-shadow: inset 0 2px 8px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.08);
     }
 
-    #cardNumber, #cardExpiry, #cardVcc, .copy-value {
+    #last4, #expiry {
       direction: ltr;
       text-align: left;
       unicode-bidi: plaintext;
     }
 
-    .textarea { min-height: 94px; resize: vertical; }
-    .input::placeholder, .textarea::placeholder { color: rgba(160, 145, 194, 0.9); }
+    .textarea {
+      min-height: 92px;
+      resize: vertical;
+    }
+
+    .input::placeholder, .textarea::placeholder {
+      color: rgba(160, 145, 194, 0.9);
+    }
 
     .btn {
       min-height: 48px;
@@ -227,46 +255,32 @@
     .btn.warning { background: linear-gradient(180deg, #f7b84a, #d97706); }
     .btn.danger { background: linear-gradient(180deg, #ff6363, #dc2626); }
 
-    .toolbar {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 2px;
-      scrollbar-width: none;
-    }
-    .toolbar::-webkit-scrollbar { display: none; }
-    .toolbar .btn {
-      white-space: nowrap;
-      min-height: 42px;
-      border-radius: 999px;
-      padding: 10px 14px;
-      font-size: 13px;
-    }
-
     .loader {
       display: none;
       margin-top: 10px;
       font-size: 13px;
       color: var(--muted);
       font-weight: 700;
-      user-select: none;
-      -webkit-user-select: none;
     }
-    .loader.show { display: block; }
+
+    .loader.show {
+      display: block;
+    }
 
     .preview-wrap {
       margin-top: 10px;
       display: none;
     }
-    .preview-wrap.show { display: block; }
+
+    .preview-wrap.show {
+      display: block;
+    }
 
     .preview-note {
       color: var(--muted);
       font-size: 12px;
       margin-bottom: 6px;
       font-weight: 700;
-      user-select: none;
-      -webkit-user-select: none;
     }
 
     #previewCanvas {
@@ -278,6 +292,24 @@
       box-shadow: var(--card-shadow);
     }
 
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+
+    .toolbar::-webkit-scrollbar { display: none; }
+
+    .toolbar .btn {
+      white-space: nowrap;
+      min-height: 42px;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 13px;
+    }
+
     .cards {
       display: grid;
       gap: 14px;
@@ -286,8 +318,6 @@
 
     .card-item {
       overflow: hidden;
-      transform-style: preserve-3d;
-      perspective: 900px;
     }
 
     .card-cover {
@@ -314,19 +344,17 @@
       color: var(--muted);
       font-size: 14px;
       font-weight: 700;
-      user-select: none;
-      -webkit-user-select: none;
     }
 
-    .card-body { padding: 16px; }
+    .card-body {
+      padding: 16px;
+    }
 
     .badges {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       margin-bottom: 12px;
-      user-select: none;
-      -webkit-user-select: none;
     }
 
     .badge {
@@ -336,12 +364,17 @@
       font-weight: 800;
       border: 1px solid transparent;
     }
+
     .badge.active { color: var(--ok); background: rgba(50,195,108,0.14); border-color: rgba(50,195,108,0.18); }
     .badge.expired { color: var(--danger); background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.18); }
     .badge.frozen { color: var(--info); background: rgba(78,163,255,0.14); border-color: rgba(78,163,255,0.18); }
     .badge.soon { color: var(--warn); background: rgba(245,158,11,0.14); border-color: rgba(245,158,11,0.20); }
 
-    .copy-grid { display: grid; gap: 10px; margin-top: 10px; }
+    .copy-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
 
     .copy-box {
       border: 1px solid var(--line);
@@ -356,8 +389,6 @@
       color: var(--muted);
       margin-bottom: 6px;
       font-weight: 700;
-      user-select: none;
-      -webkit-user-select: none;
     }
 
     .copy-row {
@@ -372,7 +403,10 @@
       word-break: break-word;
       font-size: 15px;
       font-weight: 800;
-      min-width: 130px;
+      min-width: 120px;
+      direction: ltr;
+      text-align: left;
+      unicode-bidi: plaintext;
     }
 
     .mini-btn {
@@ -397,30 +431,26 @@
       word-break: break-word;
     }
 
-    .line b {
-      user-select: none;
-      -webkit-user-select: none;
-    }
-
-    .muted-text, .footnote {
+    .footnote, .empty-state {
       color: var(--muted);
       font-size: 12px;
       line-height: 1.8;
-      user-select: none;
-      -webkit-user-select: none;
     }
 
     .empty-state {
       text-align: center;
       padding: 28px 16px;
-      color: var(--muted);
       font-weight: 700;
-      user-select: none;
-      -webkit-user-select: none;
+    }
+
+    .hidden {
+      display: none !important;
     }
 
     @media (max-width: 430px) {
-      .row-2, .actions, .actions-3 { grid-template-columns: 1fr; }
+      .row-2, .actions, .actions-3 {
+        grid-template-columns: 1fr;
+      }
       .app { padding: 10px 10px 24px; }
       .title { font-size: 20px; }
       .hero { top: 4px; }
@@ -432,8 +462,8 @@
     <div class="hero glass">
       <div class="topbar">
         <div>
-          <h1 class="title">Visa 3D Manager</h1>
-          <div class="subtitle">قص ذكي محلي للصورة + قراءة ذكية للرقم والتاريخ وCVV داخل المتصفح.</div>
+          <h1 class="title">Visa Manager Mobile Safe</h1>
+          <div class="subtitle">قص ذكي محلي للصورة وإدارة آمنة للهاتف بدون قراءة تلقائية لبيانات البطاقة الحساسة.</div>
         </div>
         <button type="button" class="icon-btn" id="themeToggle" aria-label="تبديل الوضع">☀️</button>
       </div>
@@ -442,24 +472,23 @@
     <div class="stats" id="stats"></div>
 
     <div class="section glass">
-      <h2 class="section-title">إضافة / تعديل فيزا</h2>
+      <h2 class="section-title">إضافة / تعديل بطاقة</h2>
 
       <form id="visaForm">
-        <input type="hidden" id="editId">
+        <input type="hidden" id="editId" />
 
         <div class="grid">
           <div class="field">
-            <label for="cardImage">صورة الفيزا</label>
-            <input class="input" id="cardImage" type="file" accept="image/*">
+            <label for="cardImage">صورة البطاقة</label>
+            <input class="input" id="cardImage" type="file" accept="image/*" />
           </div>
 
           <div class="actions">
-            <button type="button" class="btn info" id="ocrBtn">قراءة ذكية من الصورة</button>
-            <button type="button" class="btn ghost" id="cropPreviewBtn">قص ذكي للصورة</button>
+            <button type="button" class="btn info" id="cropBtn">قص ذكي للصورة</button>
             <button type="button" class="btn ghost" id="resetBtn">تفريغ الحقول</button>
           </div>
 
-          <div class="loader" id="ocrLoader">جاري تجهيز الذكاء المحلي...</div>
+          <div class="loader" id="loader">جاري تجهيز الصورة...</div>
 
           <div class="preview-wrap" id="previewWrap">
             <div class="preview-note">المعاينة بعد القص الذكي</div>
@@ -468,30 +497,30 @@
 
           <div class="row-2">
             <div class="field">
-              <label for="cardNumber">رقم الفيزا</label>
-              <input class="input" id="cardNumber" type="text" placeholder="سيظهر هنا أو اكتبه يدويًا" required>
+              <label for="alias">اسم / مرجع البطاقة</label>
+              <input class="input" id="alias" type="text" placeholder="مثال: UUPAY 1 USD" />
             </div>
             <div class="field">
-              <label for="cardExpiry">التاريخ</label>
-              <input class="input" id="cardExpiry" type="text" placeholder="MM/YY">
+              <label for="last4">آخر 4 أرقام</label>
+              <input class="input" id="last4" type="text" inputmode="numeric" maxlength="4" placeholder="2453" />
             </div>
           </div>
 
           <div class="row-2">
             <div class="field">
-              <label for="cardVcc">VCC / CVV</label>
-              <input class="input" id="cardVcc" type="text" placeholder="123 أو 703">
+              <label for="expiry">تاريخ الانتهاء</label>
+              <input class="input" id="expiry" type="text" inputmode="numeric" placeholder="03/28" />
             </div>
             <div class="field">
               <label for="startDate">تاريخ / وقت البداية</label>
-              <input class="input" id="startDate" type="datetime-local">
+              <input class="input" id="startDate" type="datetime-local" />
             </div>
           </div>
 
           <div class="row-2">
             <div class="field">
               <label for="durationValue">مدة التفعيل</label>
-              <input class="input" id="durationValue" type="number" min="1" value="3" required>
+              <input class="input" id="durationValue" type="number" min="1" value="3" />
             </div>
             <div class="field">
               <label for="durationUnit">نوع المدة</label>
@@ -505,22 +534,22 @@
 
           <div class="field">
             <label for="cardNote">ملاحظة</label>
-            <textarea class="textarea" id="cardNote" placeholder="أي ملاحظة عن الفيزا"></textarea>
+            <textarea class="textarea" id="cardNote" placeholder="أي ملاحظة إضافية"></textarea>
           </div>
         </div>
 
         <div class="actions">
-          <button type="submit" class="btn primary" id="saveBtn">حفظ الفيزا</button>
+          <button type="submit" class="btn primary" id="saveBtn">حفظ البطاقة</button>
           <button type="button" class="btn ghost" id="exportBtn">تصدير نسخة</button>
         </div>
 
         <div class="actions">
           <button type="button" class="btn ghost" id="importBtn">استيراد نسخة</button>
-          <input id="importFile" type="file" accept="application/json" style="display:none;">
+          <input id="importFile" type="file" accept="application/json" class="hidden" />
         </div>
 
         <div class="footnote">
-          هذه النسخة تستخدم قصًا ذكيًا محليًا ومحاولة قراءة ذكية داخل الجهاز. يلزم اتصال إنترنت عند أول فتح لتحميل المكتبات فقط.
+          هذا الإصدار لا يقرأ أو يخزن رقم البطاقة الكامل أو رمز الأمان تلقائيًا. أضف فقط ما تحتاجه يدويًا مثل الاسم وآخر 4 أرقام وتاريخ الانتهاء.
         </div>
       </form>
     </div>
@@ -529,7 +558,7 @@
       <h2 class="section-title">بحث وتصفية</h2>
       <div class="field">
         <label for="search">بحث</label>
-        <input class="input" id="search" type="text" placeholder="ابحث بالرقم أو التاريخ أو VCC أو الملاحظة">
+        <input class="input" id="search" type="text" placeholder="ابحث بالاسم أو آخر 4 أو الملاحظة" />
       </div>
       <div class="toolbar" style="margin-top:12px;">
         <button type="button" class="btn ghost" data-filter="all">الكل</button>
@@ -544,28 +573,12 @@
   </div>
 
   <script>
-    window.__cvReadyResolve = null;
-    window.__cvReadyPromise = new Promise(resolve => {
-      window.__cvReadyResolve = resolve;
-    });
-    window.Module = {
-      onRuntimeInitialized() {
-        if (window.__cvReadyResolve) window.__cvReadyResolve();
-      }
-    };
-  </script>
+    const STORAGE_KEY = 'visa_manager_mobile_safe_v1';
+    const THEME_KEY = 'visa_manager_theme_safe_v1';
 
-  <script async src="https://docs.opencv.org/4.x/opencv.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-
-  <script>
-    const STORAGE_KEY = 'visa_manager_mobile_3d_ai_v1';
-    const THEME_KEY = 'visa_manager_theme_ai_v1';
-
-    let visas = loadVisas();
+    let cards = loadCards();
     let currentFilter = 'all';
-    let lastAutoCroppedDataUrl = '';
-    let ocrWorkerPromise = null;
+    let croppedImageDataUrl = '';
 
     const body = document.body;
     const themeToggle = document.getElementById('themeToggle');
@@ -574,18 +587,17 @@
     const visaForm = document.getElementById('visaForm');
     const editId = document.getElementById('editId');
     const cardImage = document.getElementById('cardImage');
-    const cardNumber = document.getElementById('cardNumber');
-    const cardExpiry = document.getElementById('cardExpiry');
-    const cardVcc = document.getElementById('cardVcc');
+    const alias = document.getElementById('alias');
+    const last4 = document.getElementById('last4');
+    const expiry = document.getElementById('expiry');
     const durationValue = document.getElementById('durationValue');
     const durationUnit = document.getElementById('durationUnit');
     const startDate = document.getElementById('startDate');
     const cardNote = document.getElementById('cardNote');
     const search = document.getElementById('search');
     const importFile = document.getElementById('importFile');
-    const ocrBtn = document.getElementById('ocrBtn');
-    const cropPreviewBtn = document.getElementById('cropPreviewBtn');
-    const ocrLoader = document.getElementById('ocrLoader');
+    const cropBtn = document.getElementById('cropBtn');
+    const loader = document.getElementById('loader');
     const previewWrap = document.getElementById('previewWrap');
     const previewCanvas = document.getElementById('previewCanvas');
 
@@ -598,54 +610,23 @@
       localStorage.setItem(THEME_KEY, next);
     });
 
-    cropPreviewBtn.addEventListener('click', async () => {
+    cropBtn.addEventListener('click', async () => {
       const file = cardImage.files[0];
-      if (!file) return alert('اختر صورة أولاً');
-      try {
-        setLoader('جاري تحميل الذكاء المحلي للقص...', true);
-        const img = await loadImageFromFile(file);
-        const croppedCanvas = await autoCropVisaCardAI(img);
-        showPreview(croppedCanvas);
-        lastAutoCroppedDataUrl = croppedCanvas.toDataURL('image/jpeg', 0.95);
-        alert('تم القص الذكي للصورة');
-      } catch (error) {
-        console.error(error);
-        alert('فشل القص الذكي');
-      } finally {
-        setLoader('', false);
+      if (!file) {
+        alert('اختر صورة أولاً');
+        return;
       }
-    });
-
-    ocrBtn.addEventListener('click', async () => {
-      const file = cardImage.files[0];
-      if (!file) return alert('اختر صورة أولاً');
-
       try {
-        ocrBtn.disabled = true;
-        setLoader('جاري قص الصورة وتجهيزها...', true);
-
+        setLoader('جاري قص الصورة بذكاء محلي...', true);
         const img = await loadImageFromFile(file);
-        const croppedCanvas = await autoCropVisaCardAI(img);
+        const croppedCanvas = smartCropImage(img);
         showPreview(croppedCanvas);
-        lastAutoCroppedDataUrl = croppedCanvas.toDataURL('image/jpeg', 0.95);
-
-        setLoader('جاري القراءة الذكية للرقم والتاريخ وCVV...', true);
-        const result = await recognizeFastCard(croppedCanvas);
-
-        if (result.number) cardNumber.value = formatCardNumber(result.number);
-        if (result.expiry) cardExpiry.value = result.expiry;
-        if (result.cvv) cardVcc.value = result.cvv;
-
-        if (!result.number && !result.expiry && !result.cvv) {
-          alert('لم أستطع استخراج البيانات بشكل واضح. استخدم صورة أوضح أو عدّلها يدويًا.');
-        } else {
-          alert('تم استخراج البيانات بنجاح');
-        }
-      } catch (error) {
-        console.error(error);
-        alert('فشل في القراءة. تأكد من الإنترنت ووضوح الصورة.');
+        croppedImageDataUrl = croppedCanvas.toDataURL('image/jpeg', 0.92);
+        alert('تم القص الذكي للصورة');
+      } catch (e) {
+        console.error(e);
+        alert('فشل القص الذكي للصورة');
       } finally {
-        ocrBtn.disabled = false;
         setLoader('', false);
       }
     });
@@ -653,15 +634,15 @@
     visaForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      const existing = visas.find(v => v.id === editId.value);
-      const imageBase64 = lastAutoCroppedDataUrl || await getImageBase64(cardImage) || (existing ? existing.image : '');
+      const existing = cards.find(c => c.id === editId.value);
+      const imageBase64 = croppedImageDataUrl || await getImageBase64(cardImage) || (existing ? existing.image : '');
 
       const item = {
         id: editId.value || makeId(),
         image: imageBase64,
-        cardNumber: formatCardNumber(cardNumber.value.trim()),
-        cardExpiry: normalizeExpiry(cardExpiry.value.trim()),
-        cardVcc: normalizeCvv(cardVcc.value.trim()),
+        alias: alias.value.trim(),
+        last4: normalizeLast4(last4.value),
+        expiry: normalizeExpiry(expiry.value),
         note: cardNote.value.trim(),
         durationValue: Number(durationValue.value) || 3,
         durationUnit: durationUnit.value,
@@ -672,12 +653,12 @@
       };
 
       if (existing) {
-        visas = visas.map(v => v.id === item.id ? item : v);
+        cards = cards.map(c => c.id === item.id ? item : c);
       } else {
-        visas.unshift(item);
+        cards.unshift(item);
       }
 
-      saveVisas();
+      saveCards();
       clearForm();
       renderAll();
     });
@@ -693,12 +674,12 @@
         const text = await file.text();
         const parsed = JSON.parse(text);
         if (!Array.isArray(parsed)) throw new Error('صيغة غير صحيحة');
-        visas = parsed;
-        saveVisas();
+        cards = parsed;
+        saveCards();
         renderAll();
         alert('تم الاستيراد بنجاح');
-      } catch (error) {
-        console.error(error);
+      } catch (err) {
+        console.error(err);
         alert('فشل استيراد الملف');
       }
       importFile.value = '';
@@ -713,6 +694,14 @@
 
     search.addEventListener('input', renderAll);
 
+    last4.addEventListener('input', () => {
+      last4.value = normalizeLast4(last4.value);
+    });
+
+    expiry.addEventListener('input', () => {
+      expiry.value = normalizeExpiryLive(expiry.value);
+    });
+
     function applyTheme(mode) {
       if (mode === 'light') {
         body.classList.add('light');
@@ -724,17 +713,17 @@
     }
 
     function setLoader(text, show) {
-      if (text) ocrLoader.textContent = text;
-      ocrLoader.classList.toggle('show', !!show);
+      if (text) loader.textContent = text;
+      loader.classList.toggle('show', !!show);
     }
 
     function makeId() {
       return (window.crypto && crypto.randomUUID)
         ? crypto.randomUUID()
-        : 'v-' + Date.now() + '-' + Math.random().toString(16).slice(2);
+        : 'c-' + Date.now() + '-' + Math.random().toString(16).slice(2);
     }
 
-    function loadVisas() {
+    function loadCards() {
       try {
         return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
       } catch (_) {
@@ -742,16 +731,16 @@
       }
     }
 
-    function saveVisas() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(visas));
+    function saveCards() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cards));
     }
 
     function exportBackup() {
-      const blob = new Blob([JSON.stringify(visas, null, 2)], { type: 'application/json' });
+      const blob = new Blob([JSON.stringify(cards, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = 'visa-backup.json';
+      a.download = 'visa-safe-backup.json';
       a.click();
       URL.revokeObjectURL(url);
     }
@@ -759,16 +748,16 @@
     function clearForm() {
       visaForm.reset();
       editId.value = '';
+      alias.value = '';
+      last4.value = '';
+      expiry.value = '';
       durationValue.value = 3;
       durationUnit.value = 'days';
       startDate.value = toLocalInputValue(new Date());
-      cardNumber.value = '';
-      cardExpiry.value = '';
-      cardVcc.value = '';
       cardNote.value = '';
-      lastAutoCroppedDataUrl = '';
+      croppedImageDataUrl = '';
       hidePreview();
-      document.getElementById('saveBtn').textContent = 'حفظ الفيزا';
+      document.getElementById('saveBtn').textContent = 'حفظ البطاقة';
     }
 
     function hidePreview() {
@@ -792,6 +781,23 @@
       return local.toISOString().slice(0, 16);
     }
 
+    function normalizeLast4(value) {
+      return String(value || '').replace(/\D/g, '').slice(0, 4);
+    }
+
+    function normalizeExpiry(value) {
+      const v = String(value || '').replace(/\s+/g, '').replace(/-/g, '/');
+      const m = v.match(/(0[1-9]|1[0-2])\/?(\d{2,4})/);
+      if (!m) return v.slice(0, 5);
+      return m[1] + '/' + m[2].slice(-2);
+    }
+
+    function normalizeExpiryLive(value) {
+      const digits = String(value || '').replace(/\D/g, '').slice(0, 4);
+      if (digits.length <= 2) return digits;
+      return digits.slice(0, 2) + '/' + digits.slice(2);
+    }
+
     function unitToMs(value, unit) {
       const map = { minutes: 60000, hours: 3600000, days: 86400000 };
       return value * (map[unit] || map.days);
@@ -805,6 +811,7 @@
       const total = end - start;
       const isExpired = remaining <= 0;
       const isSoon = remaining > 0 && remaining <= Math.min(total * 0.25, 24 * 60 * 60 * 1000);
+
       return {
         start,
         end,
@@ -818,35 +825,22 @@
 
     function formatRemaining(ms) {
       if (ms <= 0) return 'انتهت المدة';
+
       const totalMinutes = Math.floor(ms / 60000);
       const days = Math.floor(totalMinutes / 1440);
       const hours = Math.floor((totalMinutes % 1440) / 60);
       const minutes = totalMinutes % 60;
+
       const parts = [];
       if (days) parts.push(days + ' يوم');
       if (hours) parts.push(hours + ' ساعة');
       if (minutes || parts.length === 0) parts.push(minutes + ' دقيقة');
+
       return parts.join(' و ');
     }
 
     function formatDate(dateLike) {
       return new Date(dateLike).toLocaleString('ar-IQ');
-    }
-
-    function translateUnit(unit) {
-      return unit === 'days' ? 'يوم' : unit === 'hours' ? 'ساعة' : 'دقيقة';
-    }
-
-    function normalizeExpiry(value) {
-      const v = String(value || '').replace(/\s+/g, '');
-      const m = v.match(/(0[1-9]|1[0-2])[\/\-]?(\d{2,4})/);
-      if (!m) return value;
-      return m[1] + '/' + m[2].slice(-2);
-    }
-
-    function normalizeCvv(value) {
-      const v = String(value || '').replace(/\D/g, '');
-      return v.slice(0, 4);
     }
 
     async function getImageBase64(input) {
@@ -876,25 +870,20 @@
       });
     }
 
-    async function ensureCvReady() {
-      if (window.cv && typeof cv.imread === 'function') return;
-      if (window.__cvReadyPromise) await window.__cvReadyPromise;
-      if (!(window.cv && typeof cv.imread === 'function')) {
-        throw new Error('OpenCV غير جاهز');
-      }
-    }
-
-    function drawScaledToCanvas(img, maxWidth = 1400) {
+    function drawScaled(img, maxWidth = 1400) {
       const canvas = document.createElement('canvas');
       let w = img.width;
       let h = img.height;
+
       if (w > maxWidth) {
         h = Math.round(h * (maxWidth / w));
         w = maxWidth;
       }
+
       canvas.width = w;
       canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
       return canvas;
     }
 
@@ -914,175 +903,117 @@
       return out;
     }
 
-    function distance(a, b) {
-      return Math.hypot(a.x - b.x, a.y - b.y);
+    function imageToGray(canvas) {
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+      const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const gray = new Uint8ClampedArray(canvas.width * canvas.height);
+
+      for (let i = 0; i < gray.length; i++) {
+        const p = i * 4;
+        const r = data.data[p];
+        const g = data.data[p + 1];
+        const b = data.data[p + 2];
+        gray[i] = (0.299 * r + 0.587 * g + 0.114 * b) | 0;
+      }
+
+      return gray;
     }
 
-    function orderQuad(points) {
-      const pts = points.slice().sort((a, b) => a.y - b.y);
-      const top = pts.slice(0, 2).sort((a, b) => a.x - b.x);
-      const bottom = pts.slice(2, 4).sort((a, b) => a.x - b.x);
-      return [top[0], top[1], bottom[1], bottom[0]];
-    }
+    function rectScore(gray, w, h, x, y, cw, ch) {
+      let edge = 0;
+      let inside = 0;
+      let count = 0;
 
-    function quadAspect(quad) {
-      const [tl, tr, br, bl] = quad;
-      const width = (distance(tl, tr) + distance(bl, br)) / 2;
-      const height = (distance(tl, bl) + distance(tr, br)) / 2;
-      return width / Math.max(1, height);
-    }
+      const left = x;
+      const right = x + cw - 1;
+      const top = y;
+      const bottom = y + ch - 1;
 
-    function detectCardQuadFromCanvas(canvas) {
-      const src = cv.imread(canvas);
-      const gray = new cv.Mat();
-      const blur = new cv.Mat();
-      const edges = new cv.Mat();
-      const kernel = cv.getStructuringElement(cv.MORPH_RECT, new cv.Size(5, 5));
-      const contours = new cv.MatVector();
-      const hierarchy = new cv.Mat();
+      for (let i = x + 1; i < x + cw - 1; i += 4) {
+        edge += Math.abs(gray[top * w + i] - gray[(top + 1) * w + i]);
+        edge += Math.abs(gray[bottom * w + i] - gray[(bottom - 1) * w + i]);
+      }
 
-      cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY, 0);
-      cv.GaussianBlur(gray, blur, new cv.Size(5, 5), 0, 0, cv.BORDER_DEFAULT);
-      cv.Canny(blur, edges, 60, 160);
-      cv.dilate(edges, edges, kernel, new cv.Point(-1, -1), 1);
-      cv.findContours(edges, contours, hierarchy, cv.RETR_LIST, cv.CHAIN_APPROX_SIMPLE);
+      for (let j = y + 1; j < y + ch - 1; j += 4) {
+        edge += Math.abs(gray[j * w + left] - gray[j * w + left + 1]);
+        edge += Math.abs(gray[j * w + right] - gray[j * w + right - 1]);
+      }
 
-      const imgArea = canvas.width * canvas.height;
-      let best = null;
-
-      for (let i = 0; i < contours.size(); i++) {
-        const cnt = contours.get(i);
-        const area = cv.contourArea(cnt);
-        if (area < imgArea * 0.03 || area > imgArea * 0.95) {
-          cnt.delete();
-          continue;
+      for (let j = y + Math.floor(ch * 0.12); j < y + Math.floor(ch * 0.88); j += 10) {
+        for (let i = x + Math.floor(cw * 0.08); i < x + Math.floor(cw * 0.92); i += 10) {
+          inside += gray[j * w + i];
+          count++;
         }
+      }
 
-        const peri = cv.arcLength(cnt, true);
-        const approx = new cv.Mat();
-        cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
+      const avgInside = count ? inside / count : 0;
+      const darkBonus = avgInside < 175 ? 120 : 20;
+      return edge + darkBonus;
+    }
 
-        if (approx.rows === 4) {
-          const pts = [];
-          for (let j = 0; j < 4; j++) {
-            pts.push({
-              x: approx.data32S[j * 2],
-              y: approx.data32S[j * 2 + 1]
-            });
-          }
+    function findBestCardRect(canvas) {
+      const w = canvas.width;
+      const h = canvas.height;
+      const gray = imageToGray(canvas);
+      const aspect = 1.586;
+      const cx = w / 2;
+      const cy = h / 2;
 
-          const quad = orderQuad(pts);
-          const aspect = quadAspect(quad);
-          if (aspect > 1.20 && aspect < 2.05) {
-            const cx = quad.reduce((s, p) => s + p.x, 0) / 4;
-            const cy = quad.reduce((s, p) => s + p.y, 0) / 4;
-            const centerDist = Math.hypot(cx - canvas.width / 2, cy - canvas.height / 2) / Math.hypot(canvas.width / 2, canvas.height / 2);
-            const aspectScore = 1 - Math.abs(aspect - 1.586) / 1.586;
-            const score = (area / imgArea) * 1000 + aspectScore * 350 + (1 - centerDist) * 120;
+      let best = {
+        score: -Infinity,
+        x: Math.floor(w * 0.06),
+        y: Math.floor(h * 0.20),
+        cw: Math.floor(w * 0.88),
+        ch: Math.floor((w * 0.88) / aspect)
+      };
 
-            if (!best || score > best.score) {
-              best = { points: quad, score };
+      const scales = [0.92, 0.86, 0.80, 0.74, 0.68, 0.62, 0.56, 0.50];
+      const stepX = Math.max(8, Math.floor(w / 32));
+      const stepY = Math.max(8, Math.floor(h / 34));
+
+      for (const scale of scales) {
+        const cw = Math.floor(w * scale);
+        const ch = Math.floor(cw / aspect);
+        if (cw < 180 || ch < 110 || cw > w || ch > h) continue;
+
+        for (let y = 0; y <= h - ch; y += stepY) {
+          for (let x = 0; x <= w - cw; x += stepX) {
+            const score = rectScore(gray, w, h, x, y, cw, ch);
+            const rcx = x + cw / 2;
+            const rcy = y + ch / 2;
+            const dist = Math.abs(rcx - cx) / w + Math.abs(rcy - cy) / h;
+            const centerBonus = (1 - dist) * 65;
+            const finalScore = score + centerBonus;
+
+            if (finalScore > best.score) {
+              best = { score: finalScore, x, y, cw, ch };
             }
           }
         }
-
-        approx.delete();
-        cnt.delete();
       }
-
-      src.delete();
-      gray.delete();
-      blur.delete();
-      edges.delete();
-      kernel.delete();
-      contours.delete();
-      hierarchy.delete();
 
       return best;
     }
 
-    function warpQuadToCard(canvas, quad) {
-      const outW = 1200;
-      const outH = Math.round(outW / 1.586);
-
-      const src = cv.imread(canvas);
-      const dst = new cv.Mat();
-      const srcTri = cv.matFromArray(4, 1, cv.CV_32FC2, [
-        quad[0].x, quad[0].y,
-        quad[1].x, quad[1].y,
-        quad[2].x, quad[2].y,
-        quad[3].x, quad[3].y
-      ]);
-      const dstTri = cv.matFromArray(4, 1, cv.CV_32FC2, [
-        0, 0,
-        outW, 0,
-        outW, outH,
-        0, outH
-      ]);
-
-      const M = cv.getPerspectiveTransform(srcTri, dstTri);
-      cv.warpPerspective(
-        src,
-        dst,
-        M,
-        new cv.Size(outW, outH),
-        cv.INTER_LINEAR,
-        cv.BORDER_REPLICATE,
-        new cv.Scalar()
-      );
-
-      const out = document.createElement('canvas');
-      out.width = outW;
-      out.height = outH;
-      cv.imshow(out, dst);
-
-      src.delete();
-      dst.delete();
-      srcTri.delete();
-      dstTri.delete();
-      M.delete();
-
-      return out;
-    }
-
-    function fallbackCardCrop(canvas) {
+    function cropRectToCard(canvas, rect) {
       const aspect = 1.586;
+      const padX = Math.floor(rect.cw * 0.04);
+      const padY = Math.floor(rect.ch * 0.06);
+
+      const x = Math.max(0, rect.x - padX);
+      const y = Math.max(0, rect.y - padY);
+      const cw = Math.min(canvas.width - x, rect.cw + padX * 2);
+      const ch = Math.min(canvas.height - y, rect.ch + padY * 2);
+
       const out = document.createElement('canvas');
       out.width = 1200;
       out.height = Math.round(out.width / aspect);
-      const ctx = out.getContext('2d');
-
-      let x, y, cw, ch;
-
-      if (canvas.height > canvas.width) {
-        cw = Math.floor(canvas.width * 0.92);
-        ch = Math.floor(cw / aspect);
-        if (ch > canvas.height * 0.72) {
-          ch = Math.floor(canvas.height * 0.68);
-          cw = Math.floor(ch * aspect);
-        }
-        x = Math.floor((canvas.width - cw) / 2);
-        y = Math.floor(canvas.height * 0.18);
-        if (y + ch > canvas.height) y = Math.floor((canvas.height - ch) / 2);
-      } else {
-        cw = Math.floor(canvas.width * 0.88);
-        ch = Math.floor(cw / aspect);
-        if (ch > canvas.height * 0.88) {
-          ch = Math.floor(canvas.height * 0.82);
-          cw = Math.floor(ch * aspect);
-        }
-        x = Math.floor((canvas.width - cw) / 2);
-        y = Math.floor((canvas.height - ch) / 2);
-      }
-
-      ctx.drawImage(canvas, x, y, cw, ch, 0, 0, out.width, out.height);
+      out.getContext('2d').drawImage(canvas, x, y, cw, ch, 0, 0, out.width, out.height);
       return out;
     }
 
-    async function autoCropVisaCardAI(img) {
-      await ensureCvReady();
-
-      const base = drawScaledToCanvas(img, 1400);
+    function smartCropImage(img) {
+      const base = drawScaled(img, 1400);
       const candidates = [
         { canvas: base, angle: 0 },
         { canvas: rotateCanvas(base, 90), angle: 90 },
@@ -1092,358 +1023,128 @@
       let bestCandidate = null;
 
       for (const candidate of candidates) {
-        const detected = detectCardQuadFromCanvas(candidate.canvas);
-        if (detected && (!bestCandidate || detected.score > bestCandidate.score)) {
-          bestCandidate = { ...detected, canvas: candidate.canvas };
+        const rect = findBestCardRect(candidate.canvas);
+        if (!bestCandidate || rect.score > bestCandidate.rect.score) {
+          bestCandidate = { canvas: candidate.canvas, rect };
         }
       }
 
-      if (bestCandidate) {
-        return warpQuadToCard(bestCandidate.canvas, bestCandidate.points);
+      return cropRectToCard(bestCandidate.canvas, bestCandidate.rect);
+    }
+
+    function renderStats() {
+      const computed = cards.map(c => computeStatus(c));
+      const active = computed.filter(s => s.isActive).length;
+      const expired = computed.filter(s => s.isExpired).length;
+      const frozen = computed.filter(s => s.isFrozen).length;
+      const soon = computed.filter(s => s.isSoon && !s.isFrozen && !s.isExpired).length;
+
+      stats.innerHTML = [
+        statCard('إجمالي البطاقات', cards.length),
+        statCard('تعمل الآن', active),
+        statCard('منتهية', expired),
+        statCard('مجمّدة', frozen),
+        statCard('تنتهي قريبًا', soon)
+      ].join('');
+    }
+
+    function statCard(label, value) {
+      return `<div class="stat glass"><small>${label}</small><strong>${value}</strong></div>`;
+    }
+
+    function getFilteredCards() {
+      const q = search.value.trim().toLowerCase();
+
+      return cards.filter(item => {
+        const st = computeStatus(item);
+        const matchesSearch = !q || [item.alias, item.last4, item.expiry, item.note].join(' ').toLowerCase().includes(q);
+        const matchesFilter =
+          currentFilter === 'all' ||
+          (currentFilter === 'active' && st.isActive) ||
+          (currentFilter === 'expired' && st.isExpired) ||
+          (currentFilter === 'frozen' && st.isFrozen) ||
+          (currentFilter === 'soon' && st.isSoon && !st.isExpired && !st.isFrozen);
+
+        return matchesSearch && matchesFilter;
+      });
+    }
+
+    function renderAll() {
+      renderStats();
+
+      const filtered = getFilteredCards();
+
+      if (!filtered.length) {
+        cardsContainer.innerHTML = '<div class="section glass empty-state">لا توجد بطاقات مطابقة حاليًا.</div>';
+        return;
       }
 
-      return fallbackCardCrop(base);
-    }
+      cardsContainer.innerHTML = filtered.map(item => {
+        const st = computeStatus(item);
 
-    function preprocessForOCR(sourceCanvas, invert = false) {
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        return `
+          <div class="card-item glass">
+            <div class="card-cover">
+              ${item.image ? `<img src="${item.image}" alt="card image">` : `<div class="empty-image">لا توجد صورة</div>`}
+            </div>
 
-      const targetW = 1500;
-      const targetH = Math.round(sourceCanvas.height * (targetW / sourceCanvas.width));
-      canvas.width = targetW;
-      canvas.height = targetH;
-      ctx.drawImage(sourceCanvas, 0, 0, targetW, targetH);
+            <div class="card-body">
+              <div class="badges">
+                ${st.isFrozen ? `<span class="badge frozen">مجمّدة</span>` : ``}
+                ${st.isActive ? `<span class="badge active">تعمل</span>` : ``}
+                ${st.isExpired ? `<span class="badge expired">انتهت</span>` : ``}
+                ${st.isSoon && !st.isExpired && !st.isFrozen ? `<span class="badge soon">تنتهي قريبًا</span>` : ``}
+              </div>
 
-      const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      const d = img.data;
+              <div class="copy-grid">
+                <div class="copy-box">
+                  <div class="label">الاسم / المرجع</div>
+                  <div class="copy-row">
+                    <div class="copy-value">${escapeHtml(item.alias || '-')}</div>
+                    <button class="mini-btn" onclick="copyText('${escapeForJs(item.alias || '')}')">نسخ</button>
+                    <button class="mini-btn ghost" onclick="editCard('${item.id}')">تعديل</button>
+                  </div>
+                </div>
 
-      for (let i = 0; i < d.length; i += 4) {
-        let gray = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
-        if (invert) gray = 255 - gray;
-        gray = (gray - 128) * 2.1 + 128;
-        gray = Math.max(0, Math.min(255, gray));
-        if (gray > 185) gray = 255;
-        if (gray < 55) gray = 0;
-        d[i] = gray;
-        d[i + 1] = gray;
-        d[i + 2] = gray;
-      }
+                <div class="copy-box">
+                  <div class="label">آخر 4 أرقام</div>
+                  <div class="copy-row">
+                    <div class="copy-value">${escapeHtml(item.last4 || '-')}</div>
+                    <button class="mini-btn" onclick="copyText('${escapeForJs(item.last4 || '')}')">نسخ</button>
+                    <button class="mini-btn ghost" onclick="editCard('${item.id}')">تعديل</button>
+                  </div>
+                </div>
 
-      ctx.putImageData(img, 0, 0);
-      return canvas;
-    }
+                <div class="copy-box">
+                  <div class="label">تاريخ الانتهاء</div>
+                  <div class="copy-row">
+                    <div class="copy-value">${escapeHtml(item.expiry || '-')}</div>
+                    <button class="mini-btn" onclick="copyText('${escapeForJs(item.expiry || '')}')">نسخ</button>
+                    <button class="mini-btn ghost" onclick="editCard('${item.id}')">تعديل</button>
+                  </div>
+                </div>
+              </div>
 
-    function cropCanvasByPct(canvas, leftPct, topPct, widthPct, heightPct) {
-      const out = document.createElement('canvas');
-      const sx = Math.round(canvas.width * leftPct);
-      const sy = Math.round(canvas.height * topPct);
-      const sw = Math.round(canvas.width * widthPct);
-      const sh = Math.round(canvas.height * heightPct);
-      out.width = sw;
-      out.height = sh;
-      out.getContext('2d').drawImage(canvas, sx, sy, sw, sh, 0, 0, sw, sh);
-      return out;
-    }
+              <div class="line"><b>بدأت:</b> ${formatDate(item.startAt)}</div>
+              <div class="line"><b>تنتهي:</b> ${formatDate(st.end)}</div>
+              <div class="line"><b>المدة:</b> ${item.durationValue} ${translateUnit(item.durationUnit)}</div>
+              <div class="line"><b>الوقت المتبقي:</b> ${st.isExpired ? 'انتهت المدة' : formatRemaining(st.remaining)}</div>
+              <div class="line"><b>الملاحظة:</b> ${escapeHtml(item.note || 'لا توجد ملاحظة')}</div>
 
-    async function getOcrWorker() {
-      if (!window.Tesseract) throw new Error('Tesseract غير محمّل');
-      if (!ocrWorkerPromise) {
-        ocrWorkerPromise = (async () => {
-          const worker = await Tesseract.createWorker('eng', 1, {
-            logger: m => {
-              if (m && m.status && typeof m.progress === 'number') {
-                setLoader('OCR: ' + m.status + ' ' + Math.round(m.progress * 100) + '%', true);
-              }
-            }
-          });
-          return worker;
-        })();
-      }
-      return ocrWorkerPromise;
-    }
+              <div class="actions-3">
+                <button class="btn ghost" onclick="editCard('${item.id}')">تعديل</button>
+                <button class="btn info" onclick="toggleFreeze('${item.id}')">${st.isFrozen ? 'فك التجميد' : 'تجميد'}</button>
+                <button class="btn warning" onclick="restartCard('${item.id}')">إعادة</button>
+              </div>
 
-    async function workerRead(image, params) {
-      const worker = await getOcrWorker();
-      await worker.setParameters({
-        preserve_interword_spaces: '1',
-        user_defined_dpi: '300',
-        ...params
-      });
-      const result = await worker.recognize(image);
-      return (result.data.text || '').replace(/\n/g, ' ').trim();
-    }
-
-    function normalizeOcrText(text) {
-      return String(text || '')
-        .replace(/[|Il]/g, '1')
-        .replace(/[OoQ]/g, '0')
-        .replace(/[Ss]/g, '5')
-        .replace(/[Bb]/g, '8')
-        .replace(/[Zz]/g, '2')
-        .replace(/\s+/g, ' ')
-        .trim();
-    }
-
-    function reverseDigits(str) {
-      return String(str || '').split('').reverse().join('');
-    }
-
-    function luhnCheck(num) {
-      const n = String(num || '').replace(/\D/g, '');
-      if (n.length < 13) return false;
-      let sum = 0;
-      let alt = false;
-      for (let i = n.length - 1; i >= 0; i--) {
-        let d = parseInt(n[i], 10);
-        if (alt) {
-          d *= 2;
-          if (d > 9) d -= 9;
-        }
-        sum += d;
-        alt = !alt;
-      }
-      return sum % 10 === 0;
-    }
-
-    function extractCardNumberCandidates(text) {
-      const clean = normalizeOcrText(text);
-      const matches = clean.match(/(?:\d[ -]*?){13,19}/g) || [];
-      const all = new Set();
-
-      for (const m of matches) {
-        const digits = m.replace(/\D/g, '');
-        if (digits.length >= 13 && digits.length <= 19) {
-          all.add(digits);
-          all.add(reverseDigits(digits));
-        }
-      }
-
-      const plain = clean.replace(/\D/g, '');
-      if (plain.length >= 13 && plain.length <= 19) {
-        all.add(plain);
-        all.add(reverseDigits(plain));
-      }
-
-      return Array.from(all);
-    }
-
-    function extractExpiryCandidates(text) {
-      const clean = normalizeOcrText(text);
-      const results = new Set();
-
-      const regex = /\b(0[1-9]|1[0-2])\s*[/\- ]\s*(\d{2}|\d{4})\b/g;
-      let match;
-      while ((match = regex.exec(clean)) !== null) {
-        results.add(match[1] + '/' + match[2].slice(-2));
-      }
-
-      const compact = clean.match(/\b(0[1-9]|1[0-2])(\d{2})\b/g) || [];
-      compact.forEach(v => results.add(v.slice(0, 2) + '/' + v.slice(2)));
-
-      const reversed = clean.match(/\b(\d{2})[\/\-](0[1-9]|1[0-2])\b/g) || [];
-      reversed.forEach(v => {
-        const m = v.match(/(\d{2})[\/\-](0[1-9]|1[0-2])/);
-        if (m) results.add(m[2] + '/' + m[1]);
-      });
-
-      return Array.from(results);
-    }
-
-    function addWeighted(map, value, weight) {
-      const v = String(value || '').trim();
-      if (!v) return;
-      map.set(v, (map.get(v) || 0) + weight);
-    }
-
-    function chooseBestNumber(candidates) {
-      let best = '';
-      let bestScore = -Infinity;
-
-      for (const raw of candidates) {
-        const c = String(raw || '').replace(/\D/g, '');
-        if (c.length < 13 || c.length > 19) continue;
-
-        let score = 0;
-        if (luhnCheck(c)) score += 12;
-        if (c.length === 16) score += 2;
-        if (/^(.)\1{5,}$/.test(c)) score -= 8;
-
-        if (score > bestScore) {
-          bestScore = score;
-          best = c;
-        }
-      }
-
-      return best;
-    }
-
-    function chooseBestExpiry(candidates) {
-      let best = '';
-      let bestScore = -Infinity;
-
-      for (const c of candidates) {
-        const m = String(c).match(/^(0[1-9]|1[0-2])\/(\d{2})$/);
-        if (!m) continue;
-        let score = 5;
-        const yy = parseInt(m[2], 10);
-        if (yy >= 24 && yy <= 40) score += 2;
-        if (score > bestScore) {
-          bestScore = score;
-          best = c;
-        }
-      }
-
-      return best;
-    }
-
-    function addCvvCandidatesFromText(text, map, weight) {
-      const clean = normalizeOcrText(text);
-
-      const labeled = [...clean.matchAll(/\b(?:cvv|cvc|cvn|vcc)\D{0,4}(\d{3,4})\b/ig)];
-      labeled.forEach(m => addWeighted(map, m[1], weight + 5));
-
-      const standalone = clean.match(/\b\d{3,4}\b/g) || [];
-      standalone.forEach(v => addWeighted(map, v, weight));
-    }
-
-    function chooseBestCvv(map, number, expiry) {
-      let best = '';
-      let bestScore = -Infinity;
-      const numberDigits = String(number || '').replace(/\D/g, '');
-      const expiryParts = String(expiry || '').split('/');
-
-      for (const [value, base] of map.entries()) {
-        let score = base;
-        const v = String(value || '').replace(/\D/g, '');
-        if (!(v.length === 3 || v.length === 4)) score -= 6;
-        if (numberDigits && numberDigits.includes(v)) score -= 6;
-        if (expiryParts.length === 2) {
-          if (v === expiryParts[0] || v === expiryParts[1] || v === (expiryParts[0] + expiryParts[1])) score -= 5;
-        }
-        if (/^0+$/.test(v)) score -= 4;
-        if (score > bestScore) {
-          bestScore = score;
-          best = v;
-        }
-      }
-
-      return best;
-    }
-
-    function scoreParsed(data) {
-      let score = 0;
-      if (data.number) score += luhnCheck(data.number) ? 10 : 4;
-      if (data.expiry) score += 3;
-      if (data.cvv) score += 3;
-      return score;
-    }
-
-    async function readCardOrientation(cardCanvas) {
-      const processed = preprocessForOCR(cardCanvas, false);
-      const inverted = preprocessForOCR(cardCanvas, true);
-
-      const fullRegion = processed;
-      const fullRegionInv = inverted;
-      const numberRegion = cropCanvasByPct(processed, 0.04, 0.42, 0.92, 0.22);
-      const expiryRegion = cropCanvasByPct(processed, 0.02, 0.66, 0.34, 0.20);
-      const cvvRegion = cropCanvasByPct(processed, 0.18, 0.66, 0.32, 0.20);
-      const footerRegion = cropCanvasByPct(processed, 0.00, 0.60, 0.58, 0.28);
-
-      const numberRegionInv = cropCanvasByPct(inverted, 0.04, 0.42, 0.92, 0.22);
-      const expiryRegionInv = cropCanvasByPct(inverted, 0.02, 0.66, 0.34, 0.20);
-      const cvvRegionInv = cropCanvasByPct(inverted, 0.18, 0.66, 0.32, 0.20);
-
-      const fullText = await workerRead(fullRegion, {
-        tessedit_pageseg_mode: 6,
-        tessedit_char_whitelist: '0123456789/ ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:-'
-      });
-
-      const fullTextInv = await workerRead(fullRegionInv, {
-        tessedit_pageseg_mode: 6,
-        tessedit_char_whitelist: '0123456789/ ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:-'
-      });
-
-      const numberText = await workerRead(numberRegion, {
-        tessedit_pageseg_mode: 7,
-        tessedit_char_whitelist: '0123456789 '
-      });
-
-      const numberTextInv = await workerRead(numberRegionInv, {
-        tessedit_pageseg_mode: 7,
-        tessedit_char_whitelist: '0123456789 '
-      });
-
-      const expiryText = await workerRead(expiryRegion, {
-        tessedit_pageseg_mode: 7,
-        tessedit_char_whitelist: '0123456789/'
-      });
-
-      const expiryTextInv = await workerRead(expiryRegionInv, {
-        tessedit_pageseg_mode: 7,
-        tessedit_char_whitelist: '0123456789/'
-      });
-
-      const cvvText = await workerRead(cvvRegion, {
-        tessedit_pageseg_mode: 7,
-        tessedit_char_whitelist: '0123456789'
-      });
-
-      const cvvTextInv = await workerRead(cvvRegionInv, {
-        tessedit_pageseg_mode: 7,
-        tessedit_char_whitelist: '0123456789'
-      });
-
-      const footerText = await workerRead(footerRegion, {
-        tessedit_pageseg_mode: 6,
-        tessedit_char_whitelist: '0123456789/ ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:-'
-      });
-
-      const panCandidates = [
-        ...extractCardNumberCandidates(fullText),
-        ...extractCardNumberCandidates(fullTextInv),
-        ...extractCardNumberCandidates(numberText),
-        ...extractCardNumberCandidates(numberTextInv),
-        ...extractCardNumberCandidates(footerText)
-      ];
-
-      const expiryCandidates = [
-        ...extractExpiryCandidates(fullText),
-        ...extractExpiryCandidates(fullTextInv),
-        ...extractExpiryCandidates(expiryText),
-        ...extractExpiryCandidates(expiryTextInv),
-        ...extractExpiryCandidates(footerText)
-      ];
-
-      const cvvMap = new Map();
-      addCvvCandidatesFromText(fullText, cvvMap, 1);
-      addCvvCandidatesFromText(fullTextInv, cvvMap, 1);
-      addCvvCandidatesFromText(footerText, cvvMap, 2);
-      addCvvCandidatesFromText(cvvText, cvvMap, 4);
-      addCvvCandidatesFromText(cvvTextInv, cvvMap, 4);
-
-      const number = chooseBestNumber(panCandidates);
-      const expiry = chooseBestExpiry(expiryCandidates);
-      const cvv = chooseBestCvv(cvvMap, number, expiry);
-
-      return { number, expiry, cvv };
-    }
-
-    async function recognizeFastCard(cardCanvas) {
-      const first = await readCardOrientation(cardCanvas);
-      if (scoreParsed(first) >= 14) return first;
-
-      const rotated180 = rotateCanvas(cardCanvas, 180);
-      const second = await readCardOrientation(rotated180);
-
-      return scoreParsed(second) > scoreParsed(first) ? second : first;
-    }
-
-    function formatCardNumber(number) {
-      return String(number || '')
-        .replace(/\D/g, '')
-        .replace(/(.{4})/g, '$1 ')
-        .trim();
+              <div class="actions">
+                <button class="btn danger" onclick="deleteCard('${item.id}')">حذف</button>
+                <button class="btn ghost" onclick="copyCard('${escapeForJs(item.alias || '')}','${escapeForJs(item.last4 || '')}','${escapeForJs(item.expiry || '')}')">نسخ الملخص</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
     function escapeHtml(value) {
@@ -1492,134 +1193,25 @@
       document.body.removeChild(ta);
     }
 
-    function renderStats() {
-      const computed = visas.map(v => computeStatus(v));
-      const active = computed.filter(s => s.isActive).length;
-      const expired = computed.filter(s => s.isExpired).length;
-      const frozen = computed.filter(s => s.isFrozen).length;
-      const soon = computed.filter(s => s.isSoon && !s.isFrozen && !s.isExpired).length;
-
-      stats.innerHTML = [
-        cardStat('إجمالي الفيزات', visas.length),
-        cardStat('تعمل الآن', active),
-        cardStat('منتهية', expired),
-        cardStat('مجمّدة', frozen),
-        cardStat('تنتهي قريبًا', soon)
-      ].join('');
-    }
-
-    function cardStat(label, value) {
-      return '<div class="stat glass"><small>' + label + '</small><strong>' + value + '</strong></div>';
-    }
-
-    function renderAll() {
-      renderStats();
-
-      const q = search.value.trim().toLowerCase();
-      const filtered = visas.filter(item => {
-        const st = computeStatus(item);
-        const matchesSearch = !q || [item.cardNumber, item.cardExpiry, item.cardVcc, item.note].join(' ').toLowerCase().includes(q);
-        const matchesFilter =
-          currentFilter === 'all' ||
-          (currentFilter === 'active' && st.isActive) ||
-          (currentFilter === 'expired' && st.isExpired) ||
-          (currentFilter === 'frozen' && st.isFrozen) ||
-          (currentFilter === 'soon' && st.isSoon && !st.isExpired && !st.isFrozen);
-        return matchesSearch && matchesFilter;
-      });
-
-      if (!filtered.length) {
-        cardsContainer.innerHTML = '<div class="section glass empty-state">لا توجد فيزات مطابقة حاليًا.</div>';
-        return;
-      }
-
-      cardsContainer.innerHTML = filtered.map(item => {
-        const st = computeStatus(item);
-
-        return `
-          <div class="card-item glass">
-            <div class="card-cover">
-              ${item.image ? `<img src="${item.image}" alt="visa image">` : `<div class="empty-image">لا توجد صورة</div>`}
-            </div>
-
-            <div class="card-body">
-              <div class="badges">
-                ${st.isFrozen ? `<span class="badge frozen">مجمّدة</span>` : ``}
-                ${st.isActive ? `<span class="badge active">تعمل</span>` : ``}
-                ${st.isExpired ? `<span class="badge expired">انتهت</span>` : ``}
-                ${st.isSoon && !st.isExpired && !st.isFrozen ? `<span class="badge soon">تنتهي قريبًا</span>` : ``}
-              </div>
-
-              <div class="copy-grid">
-                <div class="copy-box">
-                  <div class="label">رقم الفيزا</div>
-                  <div class="copy-row">
-                    <div class="copy-value">${escapeHtml(item.cardNumber || '-')}</div>
-                    <button class="mini-btn" onclick="copyText('${escapeForJs(item.cardNumber || '')}')">نسخ</button>
-                    <button class="mini-btn ghost" onclick="editVisa('${item.id}')">تعديل</button>
-                  </div>
-                </div>
-
-                <div class="copy-box">
-                  <div class="label">التاريخ</div>
-                  <div class="copy-row">
-                    <div class="copy-value">${escapeHtml(item.cardExpiry || '-')}</div>
-                    <button class="mini-btn" onclick="copyText('${escapeForJs(item.cardExpiry || '')}')">نسخ</button>
-                    <button class="mini-btn ghost" onclick="editVisa('${item.id}')">تعديل</button>
-                  </div>
-                </div>
-
-                <div class="copy-box">
-                  <div class="label">VCC / CVV</div>
-                  <div class="copy-row">
-                    <div class="copy-value">${escapeHtml(item.cardVcc || '-')}</div>
-                    <button class="mini-btn" onclick="copyText('${escapeForJs(item.cardVcc || '')}')">نسخ</button>
-                    <button class="mini-btn ghost" onclick="editVisa('${item.id}')">تعديل</button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="line"><b>بدأت:</b> ${formatDate(item.startAt)}</div>
-              <div class="line"><b>تنتهي:</b> ${formatDate(st.end)}</div>
-              <div class="line"><b>المدة:</b> ${item.durationValue} ${translateUnit(item.durationUnit)}</div>
-              <div class="line"><b>الوقت المتبقي:</b> ${st.isExpired ? 'انتهت المدة' : formatRemaining(st.remaining)}</div>
-              <div class="line"><b>الملاحظة:</b> ${escapeHtml(item.note || 'لا توجد ملاحظة')}</div>
-
-              <div class="actions-3">
-                <button class="btn ghost" onclick="editVisa('${item.id}')">تعديل</button>
-                <button class="btn info" onclick="toggleFreeze('${item.id}')">${st.isFrozen ? 'فك التجميد' : 'تجميد'}</button>
-                <button class="btn warning" onclick="restartVisa('${item.id}')">إعادة</button>
-              </div>
-
-              <div class="actions">
-                <button class="btn danger" onclick="deleteVisa('${item.id}')">حذف</button>
-                <button class="btn ghost" onclick="copyAll('${escapeForJs(item.cardNumber || '')}','${escapeForJs(item.cardExpiry || '')}','${escapeForJs(item.cardVcc || '')}')">نسخ الكل</button>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
     window.copyText = copyText;
 
-    window.copyAll = function(number, expiry, cvv) {
-      copyText('Number: ' + number + '\nExpiry: ' + expiry + '\nCVV: ' + cvv);
+    window.copyCard = function(aliasValue, last4Value, expiryValue) {
+      copyText('Alias: ' + aliasValue + '\nLast4: ' + last4Value + '\nExpiry: ' + expiryValue);
     };
 
-    window.editVisa = function(id) {
-      const item = visas.find(v => v.id === id);
+    window.editCard = function(id) {
+      const item = cards.find(c => c.id === id);
       if (!item) return;
 
       editId.value = item.id;
-      cardNumber.value = item.cardNumber || '';
-      cardExpiry.value = item.cardExpiry || '';
-      cardVcc.value = item.cardVcc || '';
+      alias.value = item.alias || '';
+      last4.value = item.last4 || '';
+      expiry.value = item.expiry || '';
       cardNote.value = item.note || '';
       durationValue.value = item.durationValue;
       durationUnit.value = item.durationUnit;
       startDate.value = toLocalInputValue(new Date(item.startAt));
-      lastAutoCroppedDataUrl = item.image || '';
+      croppedImageDataUrl = item.image || '';
 
       if (item.image) {
         const img = new Image();
@@ -1641,26 +1233,30 @@
     };
 
     window.toggleFreeze = function(id) {
-      visas = visas.map(v => v.id === id ? { ...v, manualFrozen: !v.manualFrozen, updatedAt: new Date().toISOString() } : v);
-      saveVisas();
+      cards = cards.map(c => c.id === id ? {
+        ...c,
+        manualFrozen: !c.manualFrozen,
+        updatedAt: new Date().toISOString()
+      } : c);
+      saveCards();
       renderAll();
     };
 
-    window.restartVisa = function(id) {
-      visas = visas.map(v => v.id === id ? {
-        ...v,
+    window.restartCard = function(id) {
+      cards = cards.map(c => c.id === id ? {
+        ...c,
         startAt: new Date().toISOString(),
         manualFrozen: false,
         updatedAt: new Date().toISOString()
-      } : v);
-      saveVisas();
+      } : c);
+      saveCards();
       renderAll();
     };
 
-    window.deleteVisa = function(id) {
-      if (!confirm('هل تريد حذف هذه الفيزا؟')) return;
-      visas = visas.filter(v => v.id !== id);
-      saveVisas();
+    window.deleteCard = function(id) {
+      if (!confirm('هل تريد حذف هذه البطاقة؟')) return;
+      cards = cards.filter(c => c.id !== id);
+      saveCards();
       renderAll();
     };
 
