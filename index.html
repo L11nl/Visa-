@@ -336,10 +336,12 @@
       font-weight: 800;
       border: 1px solid transparent;
     }
+
     .badge.active { color: var(--ok); background: rgba(50,195,108,0.14); border-color: rgba(50,195,108,0.18); }
     .badge.expired { color: var(--danger); background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.18); }
     .badge.frozen { color: var(--info); background: rgba(78,163,255,0.14); border-color: rgba(78,163,255,0.18); }
     .badge.soon { color: var(--warn); background: rgba(245,158,11,0.14); border-color: rgba(245,158,11,0.20); }
+    .badge.renewed { color: var(--ok); background: rgba(50,195,108,0.16); border-color: rgba(50,195,108,0.24); }
 
     .copy-grid { display: grid; gap: 10px; margin-top: 10px; }
 
@@ -419,11 +421,105 @@
       -webkit-user-select: none;
     }
 
+    .renew-note {
+      margin-top: 8px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--ok);
+      background: rgba(50,195,108,0.12);
+      border: 1px solid rgba(50,195,108,0.18);
+    }
+
+    .swipe-pages {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 12px;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+    }
+
+    .swipe-pages::-webkit-scrollbar {
+      display: none;
+    }
+
+    .page {
+      min-width: 100%;
+      scroll-snap-align: start;
+      display: grid;
+      gap: 14px;
+    }
+
+    .page-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px 16px;
+    }
+
+    .page-head-title {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .page-head-sub {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .page-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pager-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 4px 0 10px;
+    }
+
+    .pager-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: rgba(255,255,255,0.18);
+      transition: transform .2s ease, opacity .2s ease, background .2s ease;
+      opacity: .7;
+    }
+
+    .pager-dot.active {
+      background: linear-gradient(180deg, var(--primary), var(--primary-2));
+      opacity: 1;
+      transform: scale(1.15);
+    }
+
+    .main-cards-page .cards {
+      margin-top: 0;
+    }
+
     @media (max-width: 430px) {
       .row-2, .actions, .actions-3 { grid-template-columns: 1fr; }
       .app { padding: 10px 10px 24px; }
       .title { font-size: 20px; }
       .hero { top: 4px; }
+    }
+
+    @media (min-width: 700px) {
+      .page {
+        min-width: calc(50% - 6px);
+      }
     }
   </style>
 </head>
@@ -441,106 +537,148 @@
 
     <div class="stats" id="stats"></div>
 
-    <div class="section glass">
-      <h2 class="section-title">إضافة / تعديل فيزا</h2>
-
-      <form id="visaForm">
-        <input type="hidden" id="editId">
-
-        <div class="grid">
-          <div class="field">
-            <label for="cardImage">صورة الفيزا</label>
-            <input class="input" id="cardImage" type="file" accept="image/*">
-          </div>
-
-          <div class="actions">
-            <button type="button" class="btn info" id="ocrBtn">قراءة ذكية من الصورة</button>
-            <button type="button" class="btn ghost" id="cropPreviewBtn">قص ذكي للصورة</button>
-            <button type="button" class="btn ghost" id="resetBtn">تفريغ الحقول</button>
-          </div>
-
-          <div class="loader" id="ocrLoader">جاري تجهيز الذكاء المحلي...</div>
-
-          <div class="preview-wrap" id="previewWrap">
-            <div class="preview-note">المعاينة بعد القص الذكي</div>
-            <canvas id="previewCanvas"></canvas>
-          </div>
-
-          <div class="row-2">
-            <div class="field">
-              <label for="cardNumber">رقم الفيزا</label>
-              <input class="input" id="cardNumber" type="text" placeholder="سيظهر هنا أو اكتبه يدويًا" required>
-            </div>
-            <div class="field">
-              <label for="cardExpiry">التاريخ</label>
-              <input class="input" id="cardExpiry" type="text" placeholder="MM/YY">
-            </div>
-          </div>
-
-          <div class="row-2">
-            <div class="field">
-              <label for="cardVcc">VCC / CVV</label>
-              <input class="input" id="cardVcc" type="text" placeholder="123 أو 703">
-            </div>
-            <div class="field">
-              <label for="startDate">تاريخ / وقت البداية</label>
-              <input class="input" id="startDate" type="datetime-local">
-            </div>
-          </div>
-
-          <div class="row-2">
-            <div class="field">
-              <label for="durationValue">مدة التفعيل</label>
-              <input class="input" id="durationValue" type="number" min="1" value="3" required>
-            </div>
-            <div class="field">
-              <label for="durationUnit">نوع المدة</label>
-              <select class="select" id="durationUnit">
-                <option value="days" selected>أيام</option>
-                <option value="hours">ساعات</option>
-                <option value="minutes">دقائق</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="cardNote">ملاحظة</label>
-            <textarea class="textarea" id="cardNote" placeholder="أي ملاحظة عن الفيزا"></textarea>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button type="submit" class="btn primary" id="saveBtn">حفظ الفيزا</button>
-          <button type="button" class="btn ghost" id="exportBtn">تصدير نسخة</button>
-        </div>
-
-        <div class="actions">
-          <button type="button" class="btn ghost" id="importBtn">استيراد نسخة</button>
-          <input id="importFile" type="file" accept="application/json" style="display:none;">
-        </div>
-
-        <div class="footnote">
-          هذه النسخة تستخدم قصًا ذكيًا محليًا ومحاولة قراءة ذكية داخل الجهاز. يلزم اتصال إنترنت عند أول فتح لتحميل المكتبات فقط.
-        </div>
-      </form>
+    <div class="pager-dots" id="pagerDots">
+      <button class="pager-dot" type="button" data-page="0" aria-label="صفحة البطاقات"></button>
+      <button class="pager-dot" type="button" data-page="1" aria-label="صفحة الإضافة"></button>
+      <button class="pager-dot" type="button" data-page="2" aria-label="صفحة البحث"></button>
     </div>
 
-    <div class="section glass">
-      <h2 class="section-title">بحث وتصفية</h2>
-      <div class="field">
-        <label for="search">بحث</label>
-        <input class="input" id="search" type="text" placeholder="ابحث بالرقم أو التاريخ أو VCC أو الملاحظة">
-      </div>
-      <div class="toolbar" style="margin-top:12px;">
-        <button type="button" class="btn ghost" data-filter="all">الكل</button>
-        <button type="button" class="btn ghost" data-filter="active">تعمل</button>
-        <button type="button" class="btn ghost" data-filter="expired">انتهت</button>
-        <button type="button" class="btn ghost" data-filter="frozen">مجمّدة</button>
-        <button type="button" class="btn ghost" data-filter="soon">تنتهي قريبًا</button>
-      </div>
-    </div>
+    <div class="swipe-pages" id="swipePages">
+      <section class="page main-cards-page">
+        <div class="glass page-head">
+          <div>
+            <h2 class="page-head-title">البطاقات</h2>
+            <div class="page-head-sub">هذه هي الواجهة الرئيسية للعرض والإدارة.</div>
+          </div>
+          <div class="page-actions">
+            <button type="button" class="mini-btn ghost" onclick="goToPage(1)">إضافة</button>
+            <button type="button" class="mini-btn ghost" onclick="goToPage(2)">بحث</button>
+          </div>
+        </div>
 
-    <div class="cards" id="cardsContainer"></div>
+        <div class="cards" id="cardsContainer"></div>
+      </section>
+
+      <section class="page">
+        <div class="glass page-head">
+          <div>
+            <h2 class="page-head-title">إضافة / تعديل</h2>
+            <div class="page-head-sub">إدارة البطاقة بدون التأثير على باقي الوظائف.</div>
+          </div>
+          <div class="page-actions">
+            <button type="button" class="mini-btn ghost" onclick="goToPage(0)">الرئيسية</button>
+          </div>
+        </div>
+
+        <div class="section glass">
+          <form id="visaForm">
+            <input type="hidden" id="editId">
+
+            <div class="grid">
+              <div class="field">
+                <label for="cardImage">صورة الفيزا</label>
+                <input class="input" id="cardImage" type="file" accept="image/*">
+              </div>
+
+              <div class="actions">
+                <button type="button" class="btn info" id="ocrBtn">قراءة ذكية من الصورة</button>
+                <button type="button" class="btn ghost" id="cropPreviewBtn">قص ذكي للصورة</button>
+                <button type="button" class="btn ghost" id="resetBtn">تفريغ الحقول</button>
+              </div>
+
+              <div class="loader" id="ocrLoader">جاري تجهيز الذكاء المحلي...</div>
+
+              <div class="preview-wrap" id="previewWrap">
+                <div class="preview-note">المعاينة بعد القص الذكي</div>
+                <canvas id="previewCanvas"></canvas>
+              </div>
+
+              <div class="row-2">
+                <div class="field">
+                  <label for="cardNumber">رقم الفيزا</label>
+                  <input class="input" id="cardNumber" type="text" inputmode="numeric" maxlength="16" placeholder="16 رقم فقط" required>
+                </div>
+                <div class="field">
+                  <label for="cardExpiry">التاريخ</label>
+                  <input class="input" id="cardExpiry" type="text" placeholder="MM/YY">
+                </div>
+              </div>
+
+              <div class="row-2">
+                <div class="field">
+                  <label for="cardVcc">VCC / CVV</label>
+                  <input class="input" id="cardVcc" type="text" placeholder="123 أو 703">
+                </div>
+                <div class="field">
+                  <label for="startDate">تاريخ / وقت البداية</label>
+                  <input class="input" id="startDate" type="datetime-local">
+                </div>
+              </div>
+
+              <div class="row-2">
+                <div class="field">
+                  <label for="durationValue">مدة التفعيل</label>
+                  <input class="input" id="durationValue" type="number" min="3" value="3" required>
+                </div>
+                <div class="field">
+                  <label for="durationUnit">نوع المدة</label>
+                  <select class="select" id="durationUnit">
+                    <option value="days" selected>أيام</option>
+                    <option value="hours">ساعات</option>
+                    <option value="minutes">دقائق</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="cardNote">ملاحظة</label>
+                <textarea class="textarea" id="cardNote" placeholder="أي ملاحظة عن الفيزا"></textarea>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button type="submit" class="btn primary" id="saveBtn">حفظ الفيزا</button>
+              <button type="button" class="btn ghost" id="exportBtn">تصدير نسخة</button>
+            </div>
+
+            <div class="actions">
+              <button type="button" class="btn ghost" id="importBtn">استيراد نسخة</button>
+              <input id="importFile" type="file" accept="application/json" style="display:none;">
+            </div>
+
+            <div class="footnote">
+              هذه النسخة تستخدم قصًا ذكيًا محليًا ومحاولة قراءة ذكية داخل الجهاز. يلزم اتصال إنترنت عند أول فتح لتحميل المكتبات فقط.
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <section class="page">
+        <div class="glass page-head">
+          <div>
+            <h2 class="page-head-title">بحث وتصفية</h2>
+            <div class="page-head-sub">تحكم أسرع في الحالات والتنقل بين البطاقات.</div>
+          </div>
+          <div class="page-actions">
+            <button type="button" class="mini-btn ghost" onclick="goToPage(0)">الرئيسية</button>
+          </div>
+        </div>
+
+        <div class="section glass">
+          <div class="field">
+            <label for="search">بحث</label>
+            <input class="input" id="search" type="text" placeholder="ابحث بالرقم أو التاريخ أو VCC أو الملاحظة">
+          </div>
+          <div class="toolbar" style="margin-top:12px;">
+            <button type="button" class="btn ghost" data-filter="all">الكل</button>
+            <button type="button" class="btn ghost" data-filter="active">تعمل</button>
+            <button type="button" class="btn ghost" data-filter="expired">انتهت</button>
+            <button type="button" class="btn ghost" data-filter="frozen">مجمّدة</button>
+            <button type="button" class="btn ghost" data-filter="soon">تنتهي قريبًا</button>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 
   <script>
@@ -559,7 +697,7 @@
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
   <script>
-    const STORAGE_KEY = 'visa_manager_mobile_3d_ai_v1';
+    const STORAGE_KEY = 'visa_manager_mobile_3d_ai_v2';
     const THEME_KEY = 'visa_manager_theme_ai_v1';
 
     let visas = loadVisas();
@@ -588,9 +726,27 @@
     const ocrLoader = document.getElementById('ocrLoader');
     const previewWrap = document.getElementById('previewWrap');
     const previewCanvas = document.getElementById('previewCanvas');
+    const swipePages = document.getElementById('swipePages');
+    const pagerDots = document.querySelectorAll('.pager-dot');
 
     applyTheme(localStorage.getItem(THEME_KEY) || 'dark');
     if (!startDate.value) startDate.value = toLocalInputValue(new Date());
+
+    cardNumber.addEventListener('input', () => {
+      cardNumber.value = sanitizeCardNumber(cardNumber.value);
+    });
+
+    cardVcc.addEventListener('input', () => {
+      cardVcc.value = normalizeCvv(cardVcc.value);
+    });
+
+    swipePages.addEventListener('scroll', updatePagerDots);
+
+    pagerDots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        goToPage(Number(dot.dataset.page || 0));
+      });
+    });
 
     themeToggle.addEventListener('click', () => {
       const next = body.classList.contains('light') ? 'dark' : 'light';
@@ -653,22 +809,32 @@
     visaForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      const cleanCardNumber = sanitizeCardNumber(cardNumber.value);
+      if (cleanCardNumber.length !== 16) {
+        alert('رقم البطاقة يجب أن يكون 16 رقم فقط بدون فراغات');
+        cardNumber.focus();
+        return;
+      }
+
       const existing = visas.find(v => v.id === editId.value);
       const imageBase64 = lastAutoCroppedDataUrl || await getImageBase64(cardImage) || (existing ? existing.image : '');
 
       const item = {
         id: editId.value || makeId(),
         image: imageBase64,
-        cardNumber: formatCardNumber(cardNumber.value.trim()),
+        cardNumber: cleanCardNumber,
         cardExpiry: normalizeExpiry(cardExpiry.value.trim()),
         cardVcc: normalizeCvv(cardVcc.value.trim()),
         note: cardNote.value.trim(),
-        durationValue: Number(durationValue.value) || 3,
-        durationUnit: durationUnit.value,
+        durationValue: 3,
+        durationUnit: 'days',
         startAt: startDate.value ? new Date(startDate.value).toISOString() : new Date().toISOString(),
         manualFrozen: existing ? existing.manualFrozen : false,
         createdAt: existing ? existing.createdAt : new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
+        renewCount: existing ? (existing.renewCount || 0) : 0,
+        lastRenewedAt: existing ? (existing.lastRenewedAt || '') : '',
+        justRenewed: false
       };
 
       if (existing) {
@@ -679,6 +845,7 @@
 
       saveVisas();
       clearForm();
+      goToPage(0);
       renderAll();
     });
 
@@ -693,8 +860,19 @@
         const text = await file.text();
         const parsed = JSON.parse(text);
         if (!Array.isArray(parsed)) throw new Error('صيغة غير صحيحة');
-        visas = parsed;
+
+        visas = parsed.map(item => ({
+          ...item,
+          cardNumber: sanitizeCardNumber(item.cardNumber),
+          durationValue: 3,
+          durationUnit: 'days',
+          renewCount: item.renewCount || 0,
+          lastRenewedAt: item.lastRenewedAt || '',
+          justRenewed: false
+        })).filter(item => item.cardNumber.length === 16);
+
         saveVisas();
+        renewExpiredCards();
         renderAll();
         alert('تم الاستيراد بنجاح');
       } catch (error) {
@@ -792,19 +970,78 @@
       return local.toISOString().slice(0, 16);
     }
 
+    function sanitizeCardNumber(value) {
+      return String(value || '').replace(/\D/g, '').slice(0, 16);
+    }
+
+    function formatCardNumber(number) {
+      return sanitizeCardNumber(number);
+    }
+
+    function getRenewCycleMs() {
+      return 3 * 24 * 60 * 60 * 1000;
+    }
+
     function unitToMs(value, unit) {
       const map = { minutes: 60000, hours: 3600000, days: 86400000 };
       return value * (map[unit] || map.days);
     }
 
+    function renewExpiredCards() {
+      let changed = false;
+      const now = Date.now();
+
+      visas = visas.map(item => {
+        const start = new Date(item.startAt).getTime();
+        const cycle = getRenewCycleMs();
+
+        if (!start || Number.isNaN(start)) return item;
+
+        if (now >= start + cycle) {
+          const passedCycles = Math.floor((now - start) / cycle);
+          const nextStart = start + (passedCycles * cycle);
+
+          changed = true;
+          return {
+            ...item,
+            startAt: new Date(nextStart).toISOString(),
+            durationValue: 3,
+            durationUnit: 'days',
+            manualFrozen: false,
+            renewCount: (item.renewCount || 0) + passedCycles,
+            lastRenewedAt: new Date().toISOString(),
+            justRenewed: true,
+            updatedAt: new Date().toISOString()
+          };
+        }
+
+        return item;
+      });
+
+      if (changed) saveVisas();
+    }
+
+    function clearRenewFlags() {
+      let changed = false;
+      visas = visas.map(item => {
+        if (item.justRenewed) {
+          changed = true;
+          return { ...item, justRenewed: false };
+        }
+        return item;
+      });
+      if (changed) saveVisas();
+    }
+
     function computeStatus(item) {
       const now = Date.now();
       const start = new Date(item.startAt).getTime();
-      const end = start + unitToMs(item.durationValue, item.durationUnit);
+      const end = start + getRenewCycleMs();
       const remaining = end - now;
       const total = end - start;
       const isExpired = remaining <= 0;
       const isSoon = remaining > 0 && remaining <= Math.min(total * 0.25, 24 * 60 * 60 * 1000);
+
       return {
         start,
         end,
@@ -812,7 +1049,8 @@
         isExpired,
         isSoon,
         isFrozen: !!item.manualFrozen,
-        isActive: !item.manualFrozen && !isExpired
+        isActive: !item.manualFrozen && !isExpired,
+        isRenewed: !!item.justRenewed
       };
     }
 
@@ -1262,11 +1500,11 @@
 
       for (const raw of candidates) {
         const c = String(raw || '').replace(/\D/g, '');
-        if (c.length < 13 || c.length > 19) continue;
+
+        if (c.length !== 16) continue;
 
         let score = 0;
         if (luhnCheck(c)) score += 12;
-        if (c.length === 16) score += 2;
         if (/^(.)\1{5,}$/.test(c)) score -= 8;
 
         if (score > bestScore) {
@@ -1439,13 +1677,6 @@
       return scoreParsed(second) > scoreParsed(first) ? second : first;
     }
 
-    function formatCardNumber(number) {
-      return String(number || '')
-        .replace(/\D/g, '')
-        .replace(/(.{4})/g, '$1 ')
-        .trim();
-    }
-
     function escapeHtml(value) {
       return String(value || '')
         .replace(/&/g, '&amp;')
@@ -1495,14 +1726,14 @@
     function renderStats() {
       const computed = visas.map(v => computeStatus(v));
       const active = computed.filter(s => s.isActive).length;
-      const expired = computed.filter(s => s.isExpired).length;
       const frozen = computed.filter(s => s.isFrozen).length;
       const soon = computed.filter(s => s.isSoon && !s.isFrozen && !s.isExpired).length;
+      const renewed = visas.filter(v => (v.renewCount || 0) > 0).length;
 
       stats.innerHTML = [
         cardStat('إجمالي الفيزات', visas.length),
         cardStat('تعمل الآن', active),
-        cardStat('منتهية', expired),
+        cardStat('مجددة', renewed),
         cardStat('مجمّدة', frozen),
         cardStat('تنتهي قريبًا', soon)
       ].join('');
@@ -1525,6 +1756,7 @@
           (currentFilter === 'expired' && st.isExpired) ||
           (currentFilter === 'frozen' && st.isFrozen) ||
           (currentFilter === 'soon' && st.isSoon && !st.isExpired && !st.isFrozen);
+
         return matchesSearch && matchesFilter;
       });
 
@@ -1548,6 +1780,7 @@
                 ${st.isActive ? `<span class="badge active">تعمل</span>` : ``}
                 ${st.isExpired ? `<span class="badge expired">انتهت</span>` : ``}
                 ${st.isSoon && !st.isExpired && !st.isFrozen ? `<span class="badge soon">تنتهي قريبًا</span>` : ``}
+                ${item.justRenewed ? `<span class="badge renewed">تم تجديد البطاقة</span>` : ``}
               </div>
 
               <div class="copy-grid">
@@ -1581,9 +1814,11 @@
 
               <div class="line"><b>بدأت:</b> ${formatDate(item.startAt)}</div>
               <div class="line"><b>تنتهي:</b> ${formatDate(st.end)}</div>
-              <div class="line"><b>المدة:</b> ${item.durationValue} ${translateUnit(item.durationUnit)}</div>
+              <div class="line"><b>الدورة:</b> 3 أيام</div>
               <div class="line"><b>الوقت المتبقي:</b> ${st.isExpired ? 'انتهت المدة' : formatRemaining(st.remaining)}</div>
+              <div class="line"><b>عدد مرات التجديد:</b> ${item.renewCount || 0}</div>
               <div class="line"><b>الملاحظة:</b> ${escapeHtml(item.note || 'لا توجد ملاحظة')}</div>
+              ${item.justRenewed ? `<div class="renew-note">تم تجديد البطاقة تلقائيًا لدورة جديدة مدتها 3 أيام</div>` : ``}
 
               <div class="actions-3">
                 <button class="btn ghost" onclick="editVisa('${item.id}')">تعديل</button>
@@ -1601,6 +1836,25 @@
       }).join('');
     }
 
+    function goToPage(index) {
+      const pageWidth = swipePages.clientWidth;
+      swipePages.scrollTo({
+        left: pageWidth * index,
+        behavior: 'smooth'
+      });
+      updatePagerDots();
+    }
+
+    function updatePagerDots() {
+      const pageWidth = swipePages.clientWidth || 1;
+      const activeIndex = Math.round(swipePages.scrollLeft / pageWidth);
+
+      pagerDots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === activeIndex);
+      });
+    }
+
+    window.goToPage = goToPage;
     window.copyText = copyText;
 
     window.copyAll = function(number, expiry, cvv) {
@@ -1616,8 +1870,8 @@
       cardExpiry.value = item.cardExpiry || '';
       cardVcc.value = item.cardVcc || '';
       cardNote.value = item.note || '';
-      durationValue.value = item.durationValue;
-      durationUnit.value = item.durationUnit;
+      durationValue.value = 3;
+      durationUnit.value = 'days';
       startDate.value = toLocalInputValue(new Date(item.startAt));
       lastAutoCroppedDataUrl = item.image || '';
 
@@ -1637,6 +1891,7 @@
       }
 
       document.getElementById('saveBtn').textContent = 'حفظ التعديلات';
+      goToPage(1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -1650,7 +1905,10 @@
       visas = visas.map(v => v.id === id ? {
         ...v,
         startAt: new Date().toISOString(),
+        durationValue: 3,
+        durationUnit: 'days',
         manualFrozen: false,
+        justRenewed: false,
         updatedAt: new Date().toISOString()
       } : v);
       saveVisas();
@@ -1664,8 +1922,19 @@
       renderAll();
     };
 
+    renewExpiredCards();
     renderAll();
-    setInterval(renderAll, 30000);
+    setTimeout(updatePagerDots, 50);
+
+    setInterval(() => {
+      renewExpiredCards();
+      renderAll();
+    }, 30000);
+
+    setTimeout(() => {
+      clearRenewFlags();
+      renderAll();
+    }, 4000);
   </script>
 </body>
 </html>
