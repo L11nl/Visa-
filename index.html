@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Visa 3D Manager</title>
+  <style>
+    :root {
+      --bg: #0a0620;
+      --bg2: #160d34;
+      --panel: rgba(22, 16, 48, 0.82);
+      --panel-2: rgba(29, 21, 63, 0.82);
+      --text: #f6f0ff;
+      --muted: #cabcf0;
+      --line: rgba(194, 157, 255, 0.18);
+      --primary: #8f4bff;
+      --primary-2: #b56dff;
+      --accent: #7c3aed;
+      --ok: #32c36c;
+      --danger: #ef4444;
+      --warn: #f59e0b;
+      --info: #4ea3ff;
+      --input: rgba(255, 255, 255, 0.06);
+      --soft-shadow: 0 14px 30px rgba(0, 0, 0, 0.32);
+      --inner-glow: inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -8px 14px rgba(0,0,0,0.1);
+      --card-shadow: 0 18px 35px rgba(11, 6, 33, 0.55);
+      --radius: 24px;
+    }
+
+    body.light {
+      --bg: #f6f1ff;
+      --bg2: #ebe3ff;
+      --panel: rgba(255, 255, 255, 0.82);
+      --panel-2: rgba(248, 244, 255, 0.84);
+      --text: #24153d;
+      --muted: #715f98;
+      --line: rgba(124, 58, 237, 0.15);
+      --primary: #8f4bff;
+      --primary-2: #6d28d9;
+      --accent: #7c3aed;
+      --ok: #159b49;
+      --danger: #dc2626;
+      --warn: #d97706;
+      --info: #2563eb;
+      --input: rgba(124, 58, 237, 0.05);
+      --soft-shadow: 0 12px 26px rgba(109, 40, 217, 0.12);
+      --inner-glow: inset 0 1px 0 rgba(255,255,255,0.6), inset 0 -8px 14px rgba(109,40,217,0.04);
+      --card-shadow: 0 18px 35px rgba(109,40,217,0.15);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Helvetica, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(181,109,255,0.18), transparent 24%),
+        radial-gradient(circle at bottom left, rgba(124,58,237,0.20), transparent 28%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      color: var(--text);
+    }
+
+    .app {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 14px 12px 28px;
+    }
+
+    .glass {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--soft-shadow), var(--inner-glow);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .hero {
+      padding: 16px;
+      margin-bottom: 14px;
+      position: sticky;
+      top: 8px;
+      z-index: 20;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .title {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+
+    .subtitle {
+      margin-top: 8px;
+      line-height: 1.7;
+      color: var(--muted);
+      font-size: 13px;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .icon-btn, .btn, .mini-btn {
+      border: 1px solid var(--line);
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+      box-shadow: 0 10px 18px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.14), inset 0 -6px 14px rgba(0,0,0,0.10);
+    }
+
+    .icon-btn:active, .btn:active, .mini-btn:active {
+      transform: translateY(2px) scale(.99);
+    }
+
+    .icon-btn {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      color: #fff;
+      background: linear-gradient(180deg, var(--primary), var(--primary-2));
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .section {
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      margin: 0 0 12px;
+      font-size: 18px;
+      font-weight: 800;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .stat {
+      padding: 14px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(0,0,0,0.05));
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      box-shadow: var(--inner-glow);
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .stat small {
+      display: block;
+      color: var(--muted);
+      margin-bottom: 4px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .stat strong {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .grid { display: grid; gap: 12px; }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .actions-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 12px; }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 6px;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .input, .select, .textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: var(--input);
+      color: var(--text);
+      border-radius: 18px;
+      padding: 13px 14px;
+      outline: none;
+      font-size: 15px;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.05), inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    #cardNumber, #cardExpiry, #cardVcc, .copy-value {
+      direction: ltr;
+      text-align: left;
+      unicode-bidi: plaintext;
+    }
+
+    .textarea { min-height: 94px; resize: vertical; }
+    .input::placeholder, .textarea::placeholder { color: rgba(160, 145, 194, 0.9); }
+
+    .btn {
+      min-height: 48px;
+      border-radius: 18px;
+      padding: 12px 14px;
+      font-size: 14px;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(0,0,0,0.08));
+    }
+
+    .btn.primary { background: linear-gradient(180deg, var(--primary), var(--primary-2)); }
+    .btn.ghost {
+      color: var(--text);
+      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(0,0,0,0.06));
+    }
+    .btn.info { background: linear-gradient(180deg, #5cb4ff, #2563eb); }
+    .btn.warning { background: linear-gradient(180deg, #f7b84a, #d97706); }
+    .btn.danger { background: linear-gradient(180deg, #ff6363, #dc2626); }
+
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+      scrollbar-width: none;
+    }
+    .toolbar::-webkit-scrollbar { display: none; }
+    .toolbar .btn {
+      white-space: nowrap;
+      min-height: 42px;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 13px;
+    }
+
+    .loader {
+      display: none;
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 700;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    .loader.show { display: block; }
+
+    .preview-wrap {
+      margin-top: 10px;
+      display: none;
+    }
+    .preview-wrap.show { display: block; }
+
+    .preview-note {
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 6px;
+      font-weight: 700;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    #previewCanvas {
+      width: 100%;
+      display: block;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: #0d0d16;
+      box-shadow: var(--card-shadow);
+    }
+
+    .cards {
+      display: grid;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .card-item {
+      overflow: hidden;
+      transform-style: preserve-3d;
+      perspective: 900px;
+    }
+
+    .card-cover {
+      min-height: 212px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        linear-gradient(145deg, rgba(143,75,255,0.28), rgba(76,29,149,0.18)),
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.10));
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .card-cover img {
+      display: block;
+      width: 100%;
+      height: 212px;
+      object-fit: contain;
+      background: #080512;
+    }
+
+    .empty-image {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .card-body { padding: 16px; }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .badge {
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      border: 1px solid transparent;
+    }
+    .badge.active { color: var(--ok); background: rgba(50,195,108,0.14); border-color: rgba(50,195,108,0.18); }
+    .badge.expired { color: var(--danger); background: rgba(239,68,68,0.12); border-color: rgba(239,68,68,0.18); }
+    .badge.frozen { color: var(--info); background: rgba(78,163,255,0.14); border-color: rgba(78,163,255,0.18); }
+    .badge.soon { color: var(--warn); background: rgba(245,158,11,0.14); border-color: rgba(245,158,11,0.20); }
+
+    .copy-grid { display: grid; gap: 10px; margin-top: 10px; }
+
+    .copy-box {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(0,0,0,0.04));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    .copy-box .label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 700;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .copy-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .copy-value {
+      flex: 1;
+      word-break: break-word;
+      font-size: 15px;
+      font-weight: 800;
+      min-width: 130px;
+    }
+
+    .mini-btn {
+      min-width: 54px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      color: #fff;
+      background: linear-gradient(180deg, var(--primary), var(--primary-2));
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .mini-btn.ghost {
+      color: var(--text);
+      background: linear-gradient(180deg, rgba(255,255,255,0.10), rgba(0,0,0,0.06));
+    }
+
+    .line {
+      margin-top: 8px;
+      line-height: 1.8;
+      font-size: 14px;
+      word-break: break-word;
+    }
+
+    .line b {
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .muted-text, .footnote {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.8;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 28px 16px;
+      color: var(--muted);
+      font-weight: 700;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    @media (max-width: 430px) {
+      .row-2, .actions, .actions-3 { grid-template-columns: 1fr; }
+      .app { padding: 10px 10px 24px; }
+      .title { font-size: 20px; }
+      .hero { top: 4px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="hero glass">
+      <div class="topbar">
+        <div>
+          <h1 class="title">Visa 3D Manager</h1>
+          <div class="subtitle">قص ذكي محلي للصورة + قراءة ذكية للرقم والتاريخ وCVV داخل المتصفح.</div>
+        </div>
+        <button type="button" class="icon-btn" id="themeToggle" aria-label="تبديل الوضع">☀️</button>
+      </div>
+    </div>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="section glass">
+      <h2 class="section-title">إضافة / تعديل فيزا</h2>
+
+      <form id="visaForm">
+        <input type="hidden" id="editId">
+
+        <div class="grid">
+          <div class="field">
+            <label for="cardImage">صورة الفيزا</label>
+            <input class="input" id="cardImage" type="file" accept="image/*">
+          </div>
+
+          <div class="actions">
+            <button type="button" class="btn info" id="ocrBtn">قراءة ذكية من الصورة</button>
+            <button type="button" class="btn ghost" id="cropPreviewBtn">قص ذكي للصورة</button>
+            <button type="button" class="btn ghost" id="resetBtn">تفريغ الحقول</button>
+          </div>
+
+          <div class="loader" id="ocrLoader">جاري تجهيز الذكاء المحلي...</div>
+
+          <div class="preview-wrap" id="previewWrap">
+            <div class="preview-note">المعاينة بعد القص الذكي</div>
+            <canvas id="previewCanvas"></canvas>
+          </div>
+
+          <div class="row-2">
+            <div class="field">
+              <label for="cardNumber">رقم الفيزا</label>
+              <input class="input" id="cardNumber" type="text" placeholder="سيظهر هنا أو اكتبه يدويًا" required>
+            </div>
+            <div class="field">
+              <label for="cardExpiry">التاريخ</label>
+              <input class="input" id="cardExpiry" type="text" placeholder="MM/YY">
+            </div>
+          </div>
+
+          <div class="row-2">
+            <div class="field">
+              <label for="cardVcc">VCC / CVV</label>
+              <input class="input" id="cardVcc" type="text" placeholder="123 أو 703">
+            </div>
+            <div class="field">
+              <label for="startDate">تاريخ / وقت البداية</label>
+              <input class="input" id="startDate" type="datetime-local">
+            </div>
+          </div>
+
+          <div class="row-2">
+            <div class="field">
+              <label for="durationValue">مدة التفعيل</label>
+              <input class="input" id="durationValue" type="number" min="1" value="3" required>
+            </div>
+            <div class="field">
+              <label for="durationUnit">نوع المدة</label>
+              <select class="select" id="durationUnit">
+                <option value="days" selected>أيام</option>
+                <option value="hours">ساعات</option>
+                <option value="minutes">دقائق</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="cardNote">ملاحظة</label>
+            <textarea class="textarea" id="cardNote" placeholder="أي ملاحظة عن الفيزا"></textarea>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn primary" id="saveBtn">حفظ الفيزا</button>
+          <button type="button" class="btn ghost" id="exportBtn">تصدير نسخة</button>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="btn ghost" id="importBtn">استيراد نسخة</button>
+          <input id="importFile" type="file" accept="application/json" style="display:none;">
+        </div>
+
+        <div class="footnote">
+          هذه النسخة تستخدم قصًا ذكيًا محليًا ومحاولة قراءة ذكية داخل الجهاز. يلزم اتصال إنترنت عند أول فتح لتحميل المكتبات فقط.
+        </div>
+      </form>
+    </div>
+
+    <div class="section glass">
+      <h2 class="section-title">بحث وتصفية</h2>
+      <div class="field">
+        <label for="search">بحث</label>
+        <input class="input" id="search" type="text" placeholder="ابحث بالرقم أو التاريخ أو VCC أو الملاحظة">
+      </div>
+      <div class="toolbar" style="margin-top:12px;">
+        <button type="button" class="btn ghost" data-filter="all">الكل</button>
+        <button type="button" class="btn ghost" data-filter="active">تعمل</button>
+        <button type="button" class="btn ghost" data-filter="expired">انتهت</button>
+        <button type="button" class="btn ghost" data-filter="frozen">مجمّدة</button>
+        <button type="button" class="btn ghost" data-filter="soon">تنتهي قريبًا</button>
+      </div>
+    </div>
+
+    <div class="cards" id="cardsContainer"></div>
+  </div>
+
+  <script>
+    window.__cvReadyResolve = null;
+    window.__cvReadyPromise = new Promise(resolve => {
+      window.__cvReadyResolve = resolve;
+    });
+    window.Module = {
+      onRuntimeInitialized() {
+        if (window.__cvReadyResolve) window.__cvReadyResolve();
+      }
+    };
+  </script>
+
+  <script async src="https://docs.opencv.org/4.x/opencv.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+  <script>
+    const STORAGE_KEY = 'visa_manager_mobile_3d_ai_v1';
+    const THEME_KEY = 'visa_manager_theme_ai_v1';
+
+    let visas = loadVisas();
+    let currentFilter = 'all';
+    let lastAutoCroppedDataUrl = '';
+    let ocrWorkerPromise = null;
+
+    const body = document.body;
+    const themeToggle = document.getElementById('themeToggle');
+    const stats = document.getElementById('stats');
+    const cardsContainer = document.getElementById('cardsContainer');
+    const visaForm = document.getElementById('visaForm');
+    const editId = document.getElementById('editId');
+    const cardImage = document.getElementById('cardImage');
+    const cardNumber = document.getElementById('cardNumber');
+    const cardExpiry = document.getElementById('cardExpiry');
+    const cardVcc = document.getElementById('cardVcc');
+    const durationValue = document.getElementById('durationValue');
+    const durationUnit = document.getElementById('durationUnit');
+    const startDate = document.getElementById('startDate');
+    const cardNote = document.getElementById('cardNote');
+    const search = document.getElementById('search');
+    const importFile = document.getElementById('importFile');
+    const ocrBtn = document.getElementById('ocrBtn');
+    const cropPreviewBtn = document.getElementById('cropPreviewBtn');
+    const ocrLoader = document.getElementById('ocrLoader');
+    const previewWrap = document.getElementById('previewWrap');
+    const previewCanvas = document.getElementById('previewCanvas');
+
+    applyTheme(localStorage.getItem(THEME_KEY) || 'dark');
+    if (!startDate.value) startDate.value = toLocalInputValue(new Date());
+
+    themeToggle.addEventListener('click', () => {
+      const next = body.classList.contains('light') ? 'dark' : 'light';
+      applyTheme(next);
+      localStorage.setItem(THEME_KEY, next);
+    });
+
+    cropPreviewBtn.addEventListener('click', async () => {
+      const file = cardImage.files[0];
+      if (!file) return alert('اختر صورة أولاً');
+      try {
+        setLoader('جاري تحميل الذكاء المحلي للقص...', true);
+        const img = await loadImageFromFile(file);
+        const croppedCanvas = await autoCropVisaCardAI(img);
+        showPreview(croppedCanvas);
+        lastAutoCroppedDataUrl = croppedCanvas.toDataURL('image/jpeg', 0.95);
+        alert('تم القص الذكي للصورة');
+      } catch (error) {
+        console.error(error);
+        alert('فشل القص الذكي');
+      } finally {
+        setLoader('', false);
+      }
+    });
+
+    ocrBtn.addEventListener('click', async () => {
+      const file = cardImage.files[0];
+      if (!file) return alert('اختر صورة أولاً');
+
+      try {
+        ocrBtn.disabled = true;
+        setLoader('جاري قص الصورة وتجهيزها...', true);
+
+        const img = await loadImageFromFile(file);
+        const croppedCanvas = await autoCropVisaCardAI(img);
+        showPreview(croppedCanvas);
+        lastAutoCroppedDataUrl = croppedCanvas.toDataURL('image/jpeg', 0.95);
+
+        setLoader('جاري القراءة الذكية للرقم والتاريخ وCVV...', true);
+        const result = await recognizeFastCard(croppedCanvas);
+
+        if (result.number) cardNumber.value = formatCardNumber(result.number);
+        if (result.expiry) cardExpiry.value = result.expiry;
+        if (result.cvv) cardVcc.value = result.cvv;
+
+        if (!result.number && !result.expiry && !result.cvv) {
+          alert('لم أستطع استخراج البيانات بشكل واضح. استخدم صورة أوضح أو عدّلها يدويًا.');
+        } else {
+          alert('تم استخراج البيانات بنجاح');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('فشل في القراءة. تأكد من الإنترنت ووضوح الصورة.');
+      } finally {
+        ocrBtn.disabled = false;
+        setLoader('', false);
+      }
+    });
+
+    visaForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const existing = visas.find(v => v.id === editId.value);
+      const imageBase64 = lastAutoCroppedDataUrl || await getImageBase64(cardImage) || (existing ? existing.image : '');
+
+      const item = {
+        id: editId.value || makeId(),
+        image: imageBase64,
+        cardNumber: formatCardNumber(cardNumber.value.trim()),
+        cardExpiry: normalizeExpiry(cardExpiry.value.trim()),
+        cardVcc: normalizeCvv(cardVcc.value.trim()),
+        note: cardNote.value.trim(),
+        durationValue: Number(durationValue.value) || 3,
+        durationUnit: durationUnit.value,
+        startAt: startDate.value ? new Date(startDate.value).toISOString() : new Date().toISOString(),
+        manualFrozen: existing ? existing.manualFrozen : false,
+        createdAt: existing ? existing.createdAt : new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      if (existing) {
+        visas = visas.map(v => v.id === item.id ? item : v);
+      } else {
+        visas.unshift(item);
+      }
+
+      saveVisas();
+      clearForm();
+      renderAll();
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', clearForm);
+    document.getElementById('exportBtn').addEventListener('click', exportBackup);
+    document.getElementById('importBtn').addEventListener('click', () => importFile.click());
+
+    importFile.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const parsed = JSON.parse(text);
+        if (!Array.isArray(parsed)) throw new Error('صيغة غير صحيحة');
+        visas = parsed;
+        saveVisas();
+        renderAll();
+        alert('تم الاستيراد بنجاح');
+      } catch (error) {
+        console.error(error);
+        alert('فشل استيراد الملف');
+      }
+      importFile.value = '';
+    });
+
+    document.querySelectorAll('[data-filter]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        currentFilter = btn.dataset.filter;
+        renderAll();
+      });
+    });
+
+    search.addEventListener('input', renderAll);
+
+    function applyTheme(mode) {
+      if (mode === 'light') {
+        body.classList.add('light');
+        themeToggle.textContent = '🌙';
+      } else {
+        body.classList.remove('light');
+        themeToggle.textContent = '☀️';
+      }
+    }
+
+    function setLoader(text, show) {
+      if (text) ocrLoader.textContent = text;
+      ocrLoader.classList.toggle('show', !!show);
+    }
+
+    function makeId() {
+      return (window.crypto && crypto.randomUUID)
+        ? crypto.randomUUID()
+        : 'v-' + Date.now() + '-' + Math.random().toString(16).slice(2);
+    }
+
+    function loadVisas() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+      } catch (_) {
+        return [];
+      }
+    }
+
+    function saveVisas() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(visas));
+    }
+
+    function exportBackup() {
+      const blob = new Blob([JSON.stringify(visas, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'visa-backup.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function clearForm() {
+      visaForm.reset();
+      editId.value = '';
+      durationValue.value = 3;
+      durationUnit.value = 'days';
+      startDate.value = toLocalInputValue(new Date());
+      cardNumber.value = '';
+      cardExpiry.value = '';
+      cardVcc.value = '';
+      cardNote.value = '';
+      lastAutoCroppedDataUrl = '';
+      hidePreview();
+      document.getElementById('saveBtn').textContent = 'حفظ الفيزا';
+    }
+
+    function hidePreview() {
+      previewWrap.classList.remove('show');
+      previewCanvas.width = 0;
+      previewCanvas.height = 0;
+    }
+
+    function showPreview(canvas) {
+      previewCanvas.width = canvas.width;
+      previewCanvas.height = canvas.height;
+      const ctx = previewCanvas.getContext('2d');
+      ctx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
+      ctx.drawImage(canvas, 0, 0);
+      previewWrap.classList.add('show');
+    }
+
+    function toLocalInputValue(date) {
+      const offset = date.getTimezoneOffset();
+      const local = new Date(date.getTime() - offset * 60000);
+      return local.toISOString().slice(0, 16);
+    }
+
+    function unitToMs(value, unit) {
+      const map = { minutes: 60000, hours: 3600000, days: 86400000 };
+      return value * (map[unit] || map.days);
+    }
+
+    function computeStatus(item) {
+      const now = Date.now();
+      const start = new Date(item.startAt).getTime();
+      const end = start + unitToMs(item.durationValue, item.durationUnit);
+      const remaining = end - now;
+      const total = end - start;
+      const isExpired = remaining <= 0;
+      const isSoon = remaining > 0 && remaining <= Math.min(total * 0.25, 24 * 60 * 60 * 1000);
+      return {
+        start,
+        end,
+        remaining,
+        isExpired,
+        isSoon,
+        isFrozen: !!item.manualFrozen,
+        isActive: !item.manualFrozen && !isExpired
+      };
+    }
+
+    function formatRemaining(ms) {
+      if (ms <= 0) return 'انتهت المدة';
+      const totalMinutes = Math.floor(ms / 60000);
+      const days = Math.floor(totalMinutes / 1440);
+      const hours = Math.floor((totalMinutes % 1440) / 60);
+      const minutes = totalMinutes % 60;
+      const parts = [];
+      if (days) parts.push(days + ' يوم');
+      if (hours) parts.push(hours + ' ساعة');
+      if (minutes || parts.length === 0) parts.push(minutes + ' دقيقة');
+      return parts.join(' و ');
+    }
+
+    function formatDate(dateLike) {
+      return new Date(dateLike).toLocaleString('ar-IQ');
+    }
+
+    function translateUnit(unit) {
+      return unit === 'days' ? 'يوم' : unit === 'hours' ? 'ساعة' : 'دقيقة';
+    }
+
+    function normalizeExpiry(value) {
+      const v = String(value || '').replace(/\s+/g, '');
+      const m = v.match(/(0[1-9]|1[0-2])[\/\-]?(\d{2,4})/);
+      if (!m) return value;
+      return m[1] + '/' + m[2].slice(-2);
+    }
+
+    function normalizeCvv(value) {
+      const v = String(value || '').replace(/\D/g, '');
+      return v.slice(0, 4);
+    }
+
+    async function getImageBase64(input) {
+      const file = input.files[0];
+      if (!file) return null;
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function loadImageFromFile(file) {
+      return new Promise((resolve, reject) => {
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.onload = () => {
+          URL.revokeObjectURL(url);
+          resolve(img);
+        };
+        img.onerror = (err) => {
+          URL.revokeObjectURL(url);
+          reject(err);
+        };
+        img.src = url;
+      });
+    }
+
+    async function ensureCvReady() {
+      if (window.cv && typeof cv.imread === 'function') return;
+      if (window.__cvReadyPromise) await window.__cvReadyPromise;
+      if (!(window.cv && typeof cv.imread === 'function')) {
+        throw new Error('OpenCV غير جاهز');
+      }
+    }
+
+    function drawScaledToCanvas(img, maxWidth = 1400) {
+      const canvas = document.createElement('canvas');
+      let w = img.width;
+      let h = img.height;
+      if (w > maxWidth) {
+        h = Math.round(h * (maxWidth / w));
+        w = maxWidth;
+      }
+      canvas.width = w;
+      canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      return canvas;
+    }
+
+    function rotateCanvas(srcCanvas, angle) {
+      const rad = angle * Math.PI / 180;
+      const sin = Math.abs(Math.sin(rad));
+      const cos = Math.abs(Math.cos(rad));
+      const w = srcCanvas.width;
+      const h = srcCanvas.height;
+      const out = document.createElement('canvas');
+      out.width = Math.round(w * cos + h * sin);
+      out.height = Math.round(w * sin + h * cos);
+      const ctx = out.getContext('2d');
+      ctx.translate(out.width / 2, out.height / 2);
+      ctx.rotate(rad);
+      ctx.drawImage(srcCanvas, -w / 2, -h / 2);
+      return out;
+    }
+
+    function distance(a, b) {
+      return Math.hypot(a.x - b.x, a.y - b.y);
+    }
+
+    function orderQuad(points) {
+      const pts = points.slice().sort((a, b) => a.y - b.y);
+      const top = pts.slice(0, 2).sort((a, b) => a.x - b.x);
+      const bottom = pts.slice(2, 4).sort((a, b) => a.x - b.x);
+      return [top[0], top[1], bottom[1], bottom[0]];
+    }
+
+    function quadAspect(quad) {
+      const [tl, tr, br, bl] = quad;
+      const width = (distance(tl, tr) + distance(bl, br)) / 2;
+      const height = (distance(tl, bl) + distance(tr, br)) / 2;
+      return width / Math.max(1, height);
+    }
+
+    function detectCardQuadFromCanvas(canvas) {
+      const src = cv.imread(canvas);
+      const gray = new cv.Mat();
+      const blur = new cv.Mat();
+      const edges = new cv.Mat();
+      const kernel = cv.getStructuringElement(cv.MORPH_RECT, new cv.Size(5, 5));
+      const contours = new cv.MatVector();
+      const hierarchy = new cv.Mat();
+
+      cv.cvtColor(src, gray, cv.COLOR_RGBA2GRAY, 0);
+      cv.GaussianBlur(gray, blur, new cv.Size(5, 5), 0, 0, cv.BORDER_DEFAULT);
+      cv.Canny(blur, edges, 60, 160);
+      cv.dilate(edges, edges, kernel, new cv.Point(-1, -1), 1);
+      cv.findContours(edges, contours, hierarchy, cv.RETR_LIST, cv.CHAIN_APPROX_SIMPLE);
+
+      const imgArea = canvas.width * canvas.height;
+      let best = null;
+
+      for (let i = 0; i < contours.size(); i++) {
+        const cnt = contours.get(i);
+        const area = cv.contourArea(cnt);
+        if (area < imgArea * 0.03 || area > imgArea * 0.95) {
+          cnt.delete();
+          continue;
+        }
+
+        const peri = cv.arcLength(cnt, true);
+        const approx = new cv.Mat();
+        cv.approxPolyDP(cnt, approx, 0.02 * peri, true);
+
+        if (approx.rows === 4) {
+          const pts = [];
+          for (let j = 0; j < 4; j++) {
+            pts.push({
+              x: approx.data32S[j * 2],
+              y: approx.data32S[j * 2 + 1]
+            });
+          }
+
+          const quad = orderQuad(pts);
+          const aspect = quadAspect(quad);
+          if (aspect > 1.20 && aspect < 2.05) {
+            const cx = quad.reduce((s, p) => s + p.x, 0) / 4;
+            const cy = quad.reduce((s, p) => s + p.y, 0) / 4;
+            const centerDist = Math.hypot(cx - canvas.width / 2, cy - canvas.height / 2) / Math.hypot(canvas.width / 2, canvas.height / 2);
+            const aspectScore = 1 - Math.abs(aspect - 1.586) / 1.586;
+            const score = (area / imgArea) * 1000 + aspectScore * 350 + (1 - centerDist) * 120;
+
+            if (!best || score > best.score) {
+              best = { points: quad, score };
+            }
+          }
+        }
+
+        approx.delete();
+        cnt.delete();
+      }
+
+      src.delete();
+      gray.delete();
+      blur.delete();
+      edges.delete();
+      kernel.delete();
+      contours.delete();
+      hierarchy.delete();
+
+      return best;
+    }
+
+    function warpQuadToCard(canvas, quad) {
+      const outW = 1200;
+      const outH = Math.round(outW / 1.586);
+
+      const src = cv.imread(canvas);
+      const dst = new cv.Mat();
+      const srcTri = cv.matFromArray(4, 1, cv.CV_32FC2, [
+        quad[0].x, quad[0].y,
+        quad[1].x, quad[1].y,
+        quad[2].x, quad[2].y,
+        quad[3].x, quad[3].y
+      ]);
+      const dstTri = cv.matFromArray(4, 1, cv.CV_32FC2, [
+        0, 0,
+        outW, 0,
+        outW, outH,
+        0, outH
+      ]);
+
+      const M = cv.getPerspectiveTransform(srcTri, dstTri);
+      cv.warpPerspective(
+        src,
+        dst,
+        M,
+        new cv.Size(outW, outH),
+        cv.INTER_LINEAR,
+        cv.BORDER_REPLICATE,
+        new cv.Scalar()
+      );
+
+      const out = document.createElement('canvas');
+      out.width = outW;
+      out.height = outH;
+      cv.imshow(out, dst);
+
+      src.delete();
+      dst.delete();
+      srcTri.delete();
+      dstTri.delete();
+      M.delete();
+
+      return out;
+    }
+
+    function fallbackCardCrop(canvas) {
+      const aspect = 1.586;
+      const out = document.createElement('canvas');
+      out.width = 1200;
+      out.height = Math.round(out.width / aspect);
+      const ctx = out.getContext('2d');
+
+      let x, y, cw, ch;
+
+      if (canvas.height > canvas.width) {
+        cw = Math.floor(canvas.width * 0.92);
+        ch = Math.floor(cw / aspect);
+        if (ch > canvas.height * 0.72) {
+          ch = Math.floor(canvas.height * 0.68);
+          cw = Math.floor(ch * aspect);
+        }
+        x = Math.floor((canvas.width - cw) / 2);
+        y = Math.floor(canvas.height * 0.18);
+        if (y + ch > canvas.height) y = Math.floor((canvas.height - ch) / 2);
+      } else {
+        cw = Math.floor(canvas.width * 0.88);
+        ch = Math.floor(cw / aspect);
+        if (ch > canvas.height * 0.88) {
+          ch = Math.floor(canvas.height * 0.82);
+          cw = Math.floor(ch * aspect);
+        }
+        x = Math.floor((canvas.width - cw) / 2);
+        y = Math.floor((canvas.height - ch) / 2);
+      }
+
+      ctx.drawImage(canvas, x, y, cw, ch, 0, 0, out.width, out.height);
+      return out;
+    }
+
+    async function autoCropVisaCardAI(img) {
+      await ensureCvReady();
+
+      const base = drawScaledToCanvas(img, 1400);
+      const candidates = [
+        { canvas: base, angle: 0 },
+        { canvas: rotateCanvas(base, 90), angle: 90 },
+        { canvas: rotateCanvas(base, -90), angle: -90 }
+      ];
+
+      let bestCandidate = null;
+
+      for (const candidate of candidates) {
+        const detected = detectCardQuadFromCanvas(candidate.canvas);
+        if (detected && (!bestCandidate || detected.score > bestCandidate.score)) {
+          bestCandidate = { ...detected, canvas: candidate.canvas };
+        }
+      }
+
+      if (bestCandidate) {
+        return warpQuadToCard(bestCandidate.canvas, bestCandidate.points);
+      }
+
+      return fallbackCardCrop(base);
+    }
+
+    function preprocessForOCR(sourceCanvas, invert = false) {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+
+      const targetW = 1500;
+      const targetH = Math.round(sourceCanvas.height * (targetW / sourceCanvas.width));
+      canvas.width = targetW;
+      canvas.height = targetH;
+      ctx.drawImage(sourceCanvas, 0, 0, targetW, targetH);
+
+      const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const d = img.data;
+
+      for (let i = 0; i < d.length; i += 4) {
+        let gray = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+        if (invert) gray = 255 - gray;
+        gray = (gray - 128) * 2.1 + 128;
+        gray = Math.max(0, Math.min(255, gray));
+        if (gray > 185) gray = 255;
+        if (gray < 55) gray = 0;
+        d[i] = gray;
+        d[i + 1] = gray;
+        d[i + 2] = gray;
+      }
+
+      ctx.putImageData(img, 0, 0);
+      return canvas;
+    }
+
+    function cropCanvasByPct(canvas, leftPct, topPct, widthPct, heightPct) {
+      const out = document.createElement('canvas');
+      const sx = Math.round(canvas.width * leftPct);
+      const sy = Math.round(canvas.height * topPct);
+      const sw = Math.round(canvas.width * widthPct);
+      const sh = Math.round(canvas.height * heightPct);
+      out.width = sw;
+      out.height = sh;
+      out.getContext('2d').drawImage(canvas, sx, sy, sw, sh, 0, 0, sw, sh);
+      return out;
+    }
+
+    async function getOcrWorker() {
+      if (!window.Tesseract) throw new Error('Tesseract غير محمّل');
+      if (!ocrWorkerPromise) {
+        ocrWorkerPromise = (async () => {
+          const worker = await Tesseract.createWorker('eng', 1, {
+            logger: m => {
+              if (m && m.status && typeof m.progress === 'number') {
+                setLoader('OCR: ' + m.status + ' ' + Math.round(m.progress * 100) + '%', true);
+              }
+            }
+          });
+          return worker;
+        })();
+      }
+      return ocrWorkerPromise;
+    }
+
+    async function workerRead(image, params) {
+      const worker = await getOcrWorker();
+      await worker.setParameters({
+        preserve_interword_spaces: '1',
+        user_defined_dpi: '300',
+        ...params
+      });
+      const result = await worker.recognize(image);
+      return (result.data.text || '').replace(/\n/g, ' ').trim();
+    }
+
+    function normalizeOcrText(text) {
+      return String(text || '')
+        .replace(/[|Il]/g, '1')
+        .replace(/[OoQ]/g, '0')
+        .replace(/[Ss]/g, '5')
+        .replace(/[Bb]/g, '8')
+        .replace(/[Zz]/g, '2')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function reverseDigits(str) {
+      return String(str || '').split('').reverse().join('');
+    }
+
+    function luhnCheck(num) {
+      const n = String(num || '').replace(/\D/g, '');
+      if (n.length < 13) return false;
+      let sum = 0;
+      let alt = false;
+      for (let i = n.length - 1; i >= 0; i--) {
+        let d = parseInt(n[i], 10);
+        if (alt) {
+          d *= 2;
+          if (d > 9) d -= 9;
+        }
+        sum += d;
+        alt = !alt;
+      }
+      return sum % 10 === 0;
+    }
+
+    function extractCardNumberCandidates(text) {
+      const clean = normalizeOcrText(text);
+      const matches = clean.match(/(?:\d[ -]*?){13,19}/g) || [];
+      const all = new Set();
+
+      for (const m of matches) {
+        const digits = m.replace(/\D/g, '');
+        if (digits.length >= 13 && digits.length <= 19) {
+          all.add(digits);
+          all.add(reverseDigits(digits));
+        }
+      }
+
+      const plain = clean.replace(/\D/g, '');
+      if (plain.length >= 13 && plain.length <= 19) {
+        all.add(plain);
+        all.add(reverseDigits(plain));
+      }
+
+      return Array.from(all);
+    }
+
+    function extractExpiryCandidates(text) {
+      const clean = normalizeOcrText(text);
+      const results = new Set();
+
+      const regex = /\b(0[1-9]|1[0-2])\s*[/\- ]\s*(\d{2}|\d{4})\b/g;
+      let match;
+      while ((match = regex.exec(clean)) !== null) {
+        results.add(match[1] + '/' + match[2].slice(-2));
+      }
+
+      const compact = clean.match(/\b(0[1-9]|1[0-2])(\d{2})\b/g) || [];
+      compact.forEach(v => results.add(v.slice(0, 2) + '/' + v.slice(2)));
+
+      const reversed = clean.match(/\b(\d{2})[\/\-](0[1-9]|1[0-2])\b/g) || [];
+      reversed.forEach(v => {
+        const m = v.match(/(\d{2})[\/\-](0[1-9]|1[0-2])/);
+        if (m) results.add(m[2] + '/' + m[1]);
+      });
+
+      return Array.from(results);
+    }
+
+    function addWeighted(map, value, weight) {
+      const v = String(value || '').trim();
+      if (!v) return;
+      map.set(v, (map.get(v) || 0) + weight);
+    }
+
+    function chooseBestNumber(candidates) {
+      let best = '';
+      let bestScore = -Infinity;
+
+      for (const raw of candidates) {
+        const c = String(raw || '').replace(/\D/g, '');
+        if (c.length < 13 || c.length > 19) continue;
+
+        let score = 0;
+        if (luhnCheck(c)) score += 12;
+        if (c.length === 16) score += 2;
+        if (/^(.)\1{5,}$/.test(c)) score -= 8;
+
+        if (score > bestScore) {
+          bestScore = score;
+          best = c;
+        }
+      }
+
+      return best;
+    }
+
+    function chooseBestExpiry(candidates) {
+      let best = '';
+      let bestScore = -Infinity;
+
+      for (const c of candidates) {
+        const m = String(c).match(/^(0[1-9]|1[0-2])\/(\d{2})$/);
+        if (!m) continue;
+        let score = 5;
+        const yy = parseInt(m[2], 10);
+        if (yy >= 24 && yy <= 40) score += 2;
+        if (score > bestScore) {
+          bestScore = score;
+          best = c;
+        }
+      }
+
+      return best;
+    }
+
+    function addCvvCandidatesFromText(text, map, weight) {
+      const clean = normalizeOcrText(text);
+
+      const labeled = [...clean.matchAll(/\b(?:cvv|cvc|cvn|vcc)\D{0,4}(\d{3,4})\b/ig)];
+      labeled.forEach(m => addWeighted(map, m[1], weight + 5));
+
+      const standalone = clean.match(/\b\d{3,4}\b/g) || [];
+      standalone.forEach(v => addWeighted(map, v, weight));
+    }
+
+    function chooseBestCvv(map, number, expiry) {
+      let best = '';
+      let bestScore = -Infinity;
+      const numberDigits = String(number || '').replace(/\D/g, '');
+      const expiryParts = String(expiry || '').split('/');
+
+      for (const [value, base] of map.entries()) {
+        let score = base;
+        const v = String(value || '').replace(/\D/g, '');
+        if (!(v.length === 3 || v.length === 4)) score -= 6;
+        if (numberDigits && numberDigits.includes(v)) score -= 6;
+        if (expiryParts.length === 2) {
+          if (v === expiryParts[0] || v === expiryParts[1] || v === (expiryParts[0] + expiryParts[1])) score -= 5;
+        }
+        if (/^0+$/.test(v)) score -= 4;
+        if (score > bestScore) {
+          bestScore = score;
+          best = v;
+        }
+      }
+
+      return best;
+    }
+
+    function scoreParsed(data) {
+      let score = 0;
+      if (data.number) score += luhnCheck(data.number) ? 10 : 4;
+      if (data.expiry) score += 3;
+      if (data.cvv) score += 3;
+      return score;
+    }
+
+    async function readCardOrientation(cardCanvas) {
+      const processed = preprocessForOCR(cardCanvas, false);
+      const inverted = preprocessForOCR(cardCanvas, true);
+
+      const fullRegion = processed;
+      const fullRegionInv = inverted;
+      const numberRegion = cropCanvasByPct(processed, 0.04, 0.42, 0.92, 0.22);
+      const expiryRegion = cropCanvasByPct(processed, 0.02, 0.66, 0.34, 0.20);
+      const cvvRegion = cropCanvasByPct(processed, 0.18, 0.66, 0.32, 0.20);
+      const footerRegion = cropCanvasByPct(processed, 0.00, 0.60, 0.58, 0.28);
+
+      const numberRegionInv = cropCanvasByPct(inverted, 0.04, 0.42, 0.92, 0.22);
+      const expiryRegionInv = cropCanvasByPct(inverted, 0.02, 0.66, 0.34, 0.20);
+      const cvvRegionInv = cropCanvasByPct(inverted, 0.18, 0.66, 0.32, 0.20);
+
+      const fullText = await workerRead(fullRegion, {
+        tessedit_pageseg_mode: 6,
+        tessedit_char_whitelist: '0123456789/ ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:-'
+      });
+
+      const fullTextInv = await workerRead(fullRegionInv, {
+        tessedit_pageseg_mode: 6,
+        tessedit_char_whitelist: '0123456789/ ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:-'
+      });
+
+      const numberText = await workerRead(numberRegion, {
+        tessedit_pageseg_mode: 7,
+        tessedit_char_whitelist: '0123456789 '
+      });
+
+      const numberTextInv = await workerRead(numberRegionInv, {
+        tessedit_pageseg_mode: 7,
+        tessedit_char_whitelist: '0123456789 '
+      });
+
+      const expiryText = await workerRead(expiryRegion, {
+        tessedit_pageseg_mode: 7,
+        tessedit_char_whitelist: '0123456789/'
+      });
+
+      const expiryTextInv = await workerRead(expiryRegionInv, {
+        tessedit_pageseg_mode: 7,
+        tessedit_char_whitelist: '0123456789/'
+      });
+
+      const cvvText = await workerRead(cvvRegion, {
+        tessedit_pageseg_mode: 7,
+        tessedit_char_whitelist: '0123456789'
+      });
+
+      const cvvTextInv = await workerRead(cvvRegionInv, {
+        tessedit_pageseg_mode: 7,
+        tessedit_char_whitelist: '0123456789'
+      });
+
+      const footerText = await workerRead(footerRegion, {
+        tessedit_pageseg_mode: 6,
+        tessedit_char_whitelist: '0123456789/ ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz:-'
+      });
+
+      const panCandidates = [
+        ...extractCardNumberCandidates(fullText),
+        ...extractCardNumberCandidates(fullTextInv),
+        ...extractCardNumberCandidates(numberText),
+        ...extractCardNumberCandidates(numberTextInv),
+        ...extractCardNumberCandidates(footerText)
+      ];
+
+      const expiryCandidates = [
+        ...extractExpiryCandidates(fullText),
+        ...extractExpiryCandidates(fullTextInv),
+        ...extractExpiryCandidates(expiryText),
+        ...extractExpiryCandidates(expiryTextInv),
+        ...extractExpiryCandidates(footerText)
+      ];
+
+      const cvvMap = new Map();
+      addCvvCandidatesFromText(fullText, cvvMap, 1);
+      addCvvCandidatesFromText(fullTextInv, cvvMap, 1);
+      addCvvCandidatesFromText(footerText, cvvMap, 2);
+      addCvvCandidatesFromText(cvvText, cvvMap, 4);
+      addCvvCandidatesFromText(cvvTextInv, cvvMap, 4);
+
+      const number = chooseBestNumber(panCandidates);
+      const expiry = chooseBestExpiry(expiryCandidates);
+      const cvv = chooseBestCvv(cvvMap, number, expiry);
+
+      return { number, expiry, cvv };
+    }
+
+    async function recognizeFastCard(cardCanvas) {
+      const first = await readCardOrientation(cardCanvas);
+      if (scoreParsed(first) >= 14) return first;
+
+      const rotated180 = rotateCanvas(cardCanvas, 180);
+      const second = await readCardOrientation(rotated180);
+
+      return scoreParsed(second) > scoreParsed(first) ? second : first;
+    }
+
+    function formatCardNumber(number) {
+      return String(number || '')
+        .replace(/\D/g, '')
+        .replace(/(.{4})/g, '$1 ')
+        .trim();
+    }
+
+    function escapeHtml(value) {
+      return String(value || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function escapeForJs(value) {
+      return String(value || '')
+        .replace(/\\/g, '\\\\')
+        .replace(/'/g, "\\'")
+        .replace(/\n/g, ' ')
+        .replace(/\r/g, ' ');
+    }
+
+    function copyText(text) {
+      const value = String(text || '');
+      if (!value) return;
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(value).then(() => {
+          alert('تم النسخ');
+        }).catch(() => fallbackCopy(value));
+      } else {
+        fallbackCopy(value);
+      }
+    }
+
+    function fallbackCopy(value) {
+      const ta = document.createElement('textarea');
+      ta.value = value;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        alert('تم النسخ');
+      } catch (_) {
+        alert('تعذر النسخ');
+      }
+      document.body.removeChild(ta);
+    }
+
+    function renderStats() {
+      const computed = visas.map(v => computeStatus(v));
+      const active = computed.filter(s => s.isActive).length;
+      const expired = computed.filter(s => s.isExpired).length;
+      const frozen = computed.filter(s => s.isFrozen).length;
+      const soon = computed.filter(s => s.isSoon && !s.isFrozen && !s.isExpired).length;
+
+      stats.innerHTML = [
+        cardStat('إجمالي الفيزات', visas.length),
+        cardStat('تعمل الآن', active),
+        cardStat('منتهية', expired),
+        cardStat('مجمّدة', frozen),
+        cardStat('تنتهي قريبًا', soon)
+      ].join('');
+    }
+
+    function cardStat(label, value) {
+      return '<div class="stat glass"><small>' + label + '</small><strong>' + value + '</strong></div>';
+    }
+
+    function renderAll() {
+      renderStats();
+
+      const q = search.value.trim().toLowerCase();
+      const filtered = visas.filter(item => {
+        const st = computeStatus(item);
+        const matchesSearch = !q || [item.cardNumber, item.cardExpiry, item.cardVcc, item.note].join(' ').toLowerCase().includes(q);
+        const matchesFilter =
+          currentFilter === 'all' ||
+          (currentFilter === 'active' && st.isActive) ||
+          (currentFilter === 'expired' && st.isExpired) ||
+          (currentFilter === 'frozen' && st.isFrozen) ||
+          (currentFilter === 'soon' && st.isSoon && !st.isExpired && !st.isFrozen);
+        return matchesSearch && matchesFilter;
+      });
+
+      if (!filtered.length) {
+        cardsContainer.innerHTML = '<div class="section glass empty-state">لا توجد فيزات مطابقة حاليًا.</div>';
+        return;
+      }
+
+      cardsContainer.innerHTML = filtered.map(item => {
+        const st = computeStatus(item);
+
+        return `
+          <div class="card-item glass">
+            <div class="card-cover">
+              ${item.image ? `<img src="${item.image}" alt="visa image">` : `<div class="empty-image">لا توجد صورة</div>`}
+            </div>
+
+            <div class="card-body">
+              <div class="badges">
+                ${st.isFrozen ? `<span class="badge frozen">مجمّدة</span>` : ``}
+                ${st.isActive ? `<span class="badge active">تعمل</span>` : ``}
+                ${st.isExpired ? `<span class="badge expired">انتهت</span>` : ``}
+                ${st.isSoon && !st.isExpired && !st.isFrozen ? `<span class="badge soon">تنتهي قريبًا</span>` : ``}
+              </div>
+
+              <div class="copy-grid">
+                <div class="copy-box">
+                  <div class="label">رقم الفيزا</div>
+                  <div class="copy-row">
+                    <div class="copy-value">${escapeHtml(item.cardNumber || '-')}</div>
+                    <button class="mini-btn" onclick="copyText('${escapeForJs(item.cardNumber || '')}')">نسخ</button>
+                    <button class="mini-btn ghost" onclick="editVisa('${item.id}')">تعديل</button>
+                  </div>
+                </div>
+
+                <div class="copy-box">
+                  <div class="label">التاريخ</div>
+                  <div class="copy-row">
+                    <div class="copy-value">${escapeHtml(item.cardExpiry || '-')}</div>
+                    <button class="mini-btn" onclick="copyText('${escapeForJs(item.cardExpiry || '')}')">نسخ</button>
+                    <button class="mini-btn ghost" onclick="editVisa('${item.id}')">تعديل</button>
+                  </div>
+                </div>
+
+                <div class="copy-box">
+                  <div class="label">VCC / CVV</div>
+                  <div class="copy-row">
+                    <div class="copy-value">${escapeHtml(item.cardVcc || '-')}</div>
+                    <button class="mini-btn" onclick="copyText('${escapeForJs(item.cardVcc || '')}')">نسخ</button>
+                    <button class="mini-btn ghost" onclick="editVisa('${item.id}')">تعديل</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="line"><b>بدأت:</b> ${formatDate(item.startAt)}</div>
+              <div class="line"><b>تنتهي:</b> ${formatDate(st.end)}</div>
+              <div class="line"><b>المدة:</b> ${item.durationValue} ${translateUnit(item.durationUnit)}</div>
+              <div class="line"><b>الوقت المتبقي:</b> ${st.isExpired ? 'انتهت المدة' : formatRemaining(st.remaining)}</div>
+              <div class="line"><b>الملاحظة:</b> ${escapeHtml(item.note || 'لا توجد ملاحظة')}</div>
+
+              <div class="actions-3">
+                <button class="btn ghost" onclick="editVisa('${item.id}')">تعديل</button>
+                <button class="btn info" onclick="toggleFreeze('${item.id}')">${st.isFrozen ? 'فك التجميد' : 'تجميد'}</button>
+                <button class="btn warning" onclick="restartVisa('${item.id}')">إعادة</button>
+              </div>
+
+              <div class="actions">
+                <button class="btn danger" onclick="deleteVisa('${item.id}')">حذف</button>
+                <button class="btn ghost" onclick="copyAll('${escapeForJs(item.cardNumber || '')}','${escapeForJs(item.cardExpiry || '')}','${escapeForJs(item.cardVcc || '')}')">نسخ الكل</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    window.copyText = copyText;
+
+    window.copyAll = function(number, expiry, cvv) {
+      copyText('Number: ' + number + '\nExpiry: ' + expiry + '\nCVV: ' + cvv);
+    };
+
+    window.editVisa = function(id) {
+      const item = visas.find(v => v.id === id);
+      if (!item) return;
+
+      editId.value = item.id;
+      cardNumber.value = item.cardNumber || '';
+      cardExpiry.value = item.cardExpiry || '';
+      cardVcc.value = item.cardVcc || '';
+      cardNote.value = item.note || '';
+      durationValue.value = item.durationValue;
+      durationUnit.value = item.durationUnit;
+      startDate.value = toLocalInputValue(new Date(item.startAt));
+      lastAutoCroppedDataUrl = item.image || '';
+
+      if (item.image) {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+          showPreview(canvas);
+        };
+        img.src = item.image;
+      } else {
+        hidePreview();
+      }
+
+      document.getElementById('saveBtn').textContent = 'حفظ التعديلات';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.toggleFreeze = function(id) {
+      visas = visas.map(v => v.id === id ? { ...v, manualFrozen: !v.manualFrozen, updatedAt: new Date().toISOString() } : v);
+      saveVisas();
+      renderAll();
+    };
+
+    window.restartVisa = function(id) {
+      visas = visas.map(v => v.id === id ? {
+        ...v,
+        startAt: new Date().toISOString(),
+        manualFrozen: false,
+        updatedAt: new Date().toISOString()
+      } : v);
+      saveVisas();
+      renderAll();
+    };
+
+    window.deleteVisa = function(id) {
+      if (!confirm('هل تريد حذف هذه الفيزا؟')) return;
+      visas = visas.filter(v => v.id !== id);
+      saveVisas();
+      renderAll();
+    };
+
+    renderAll();
+    setInterval(renderAll, 30000);
+  </script>
+</body>
+</html>
